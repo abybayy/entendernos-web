@@ -9,10 +9,10 @@ import { BuyDeckButton } from "@/components/entendernos/BuyDeckButton";
 const INSTAGRAM_URL = "https://www.instagram.com/psico.mateogarcia";
 
 export default function Onboarding() {
-  // Home identity: gradiente que combina las 3 franjas etarias (Marea Creciente).
+  // Home identity: degradé sancionado por el sistema de diseño (azul profundo → celeste).
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--deck-bg", "linear-gradient(160deg, #133A59 0%, #133A59 55%, #0E6E6B 78%, #C40062 100%)");
+    root.style.setProperty("--deck-bg", "linear-gradient(160deg, #133A59 0%, #133A59 60%, #ABCAD7 100%)");
     root.style.setProperty("--deck-header-fg", "#ffffff");
     return () => {
       root.style.removeProperty("--deck-bg");
