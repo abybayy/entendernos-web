@@ -38,14 +38,14 @@ export function AppShell({ title = "Menú", children, franja }: { title?: string
           {isHome ? (
             <span aria-hidden className="p-1 w-8 h-8" />
           ) : (
-            <Link to="/" aria-label="Inicio" className="p-1 hover:opacity-80 transition" style={{ color: "var(--deck-header-fg, var(--carmesi))" }}>
+            <Link to="/" aria-label="Inicio" className="p-1 hover:opacity-80 transition" style={{ color: "var(--deck-header-fg, var(--azul-marino))" }}>
               <Home className="w-6 h-6" />
             </Link>
           )}
           {title ? (
             <h1
               className="text-[var(--carmesi)] tracking-wide whitespace-nowrap"
-              style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--deck-header-fg, var(--carmesi))", fontSize: "clamp(1rem, 4.6vw, 1.25rem)" }}
+              style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--deck-header-fg, var(--azul-marino))", fontSize: "clamp(1rem, 4.6vw, 1.25rem)" }}
             >
               {title}
             </h1>
@@ -55,7 +55,7 @@ export function AppShell({ title = "Menú", children, franja }: { title?: string
           {isHome ? (
             <span aria-hidden className="p-1 w-8 h-8" />
           ) : (
-            <button data-sfx="none" onClick={() => { playMenuSwish(); setOpen(true); }} className="p-1 transition" style={{ color: "var(--deck-header-fg, var(--carmesi))" }} aria-label="Menú">
+            <button data-sfx="none" onClick={() => { playMenuSwish(); setOpen(true); }} className="p-1 transition" style={{ color: "var(--deck-header-fg, var(--azul-marino))" }} aria-label="Menú">
               <Menu className="w-6 h-6" />
             </button>
           )}
