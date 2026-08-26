@@ -250,8 +250,8 @@ export default function Cartas() {
             const Icon = DECK_STYLES[d.id].tabIcon;
             const active = d.id === activeDeck;
             return (
-              <button key={d.id} onClick={() => switchDeck(d.id)} className={`flex flex-col items-center gap-1 py-3 text-xs relative ${active ? "text-[var(--carmesi)]" : "text-muted-foreground"}`}>
-                {active && <span className="absolute top-0 h-0.5 w-10 bg-[var(--carmesi)] rounded-full" />}
+              <button key={d.id} onClick={() => switchDeck(d.id)} className="flex flex-col items-center gap-1 py-3 text-xs relative" style={active ? { color: DECK_STYLES[d.id].accentVar } : undefined}>
+                {active && <span className="absolute top-0 h-0.5 w-10 rounded-full" style={{ background: DECK_STYLES[d.id].accentVar }} />}
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{d.subtitle}</span>
               </button>
