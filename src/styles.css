@@ -1,0 +1,88 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-display: "Fredoka", system-ui, sans-serif;
+  --font-sans: "Nunito Sans", system-ui, sans-serif;
+  --color-cyan-pastel: var(--cyan-pastel);
+  --color-carmesi: var(--carmesi);
+  --color-azul-marino: var(--azul-marino);
+  --color-rosa-cerebro: var(--rosa-cerebro);
+}
+
+:root {
+  --radius: 1rem;
+  --cyan-pastel: oklch(0.91 0.06 215);
+  --carmesi: oklch(0.55 0.21 5);
+  --azul-marino: oklch(0.28 0.07 250);
+  --rosa-cerebro: oklch(0.72 0.18 15);
+
+  --background: oklch(0.985 0.012 30);
+  --foreground: oklch(0.28 0.07 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.07 250);
+  --muted: oklch(0.96 0.02 20);
+  --muted-foreground: oklch(0.5 0.04 250);
+  --border: oklch(0.92 0.03 20);
+  --input: oklch(0.92 0.03 20);
+  --ring: oklch(0.55 0.21 5);
+}
+
+/* Franjas de edad — tokens de color por franja. */
+[data-franja="ninez"] {
+  --f-base: #F70071;
+  --f-ink: #83003C;
+  --f-bg: #FFF2F7;
+}
+
+[data-franja="adolescencia"] {
+  --f-base: #69C0BE;
+  --f-ink: #025756;
+  --f-bg: #F1FCFB;
+}
+
+[data-franja="adultez"] {
+  --f-base: #133A59;
+  --f-ink: #0E304B;
+  --f-bg: #EFF4F8;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    margin: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  button, a {
+    font-family: inherit;
+  }
+}
