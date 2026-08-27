@@ -8,6 +8,7 @@ import { AppShell } from "@/components/entendernos/AppShell";
 import { Tutorial } from "@/components/entendernos/Tutorial";
 import { BuyDeckButton } from "@/components/entendernos/BuyDeckButton";
 import { useSettings } from "@/components/entendernos/SettingsContext";
+import { loadFavorites, saveFavorites } from "@/lib/favorites";
 import { useFranja } from "@/components/entendernos/FranjaContext";
 import { playWhoosh, playSuccessChord, playChime } from "@/lib/sounds";
 import logoUrl from "@/assets/logo-entendernos.png";
@@ -60,7 +61,7 @@ export default function Cartas() {
   const [activeDeck, setActiveDeck] = useState<DeckId>("adulto");
   const [index, setIndex] = useState(0);
   const [fading, setFading] = useState(false);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
   const [tutorialOpen, setTutorialOpen] = useState(false);
@@ -98,7 +99,15 @@ export default function Cartas() {
     setCompletionOpen(false);
     switchDeck(nextDeckId);
   };
-  const toggleFav = () => setFavorites((p) => { const n = new Set(p); n.has(qKey) ? n.delete(qKey) : n.add(qKey); return n; });
+  const toggleFav = () =>
+    setFavorites((p) => {
+      const n = new Set(p);
+      const wasFav = n.has(qKey);
+      wasFav ? n.delete(qKey) : n.add(qKey);
+      saveFavorites(n);
+      if (!wasFav) toast.success("¡Gracias! Nos ayuda a saber qué preguntas les llegan más 💛");
+      return n;
+    });
 
   useEffect(() => {
     document.documentElement.style.setProperty("--deck-accent", "var(--f-base)");

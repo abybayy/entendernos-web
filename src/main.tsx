@@ -9,6 +9,7 @@ import { RootShell } from "@/components/entendernos/RootShell";
 import Onboarding from "@/pages/Onboarding";
 import Cartas from "@/pages/Cartas";
 import MazoFisico from "@/pages/MazoFisico";
+import Favoritos from "@/pages/Favoritos";
 import MaterialApoyo from "@/pages/MaterialApoyo";
 import Novedades from "@/pages/Novedades";
 import Creditos from "@/pages/Creditos";
@@ -26,6 +27,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<Onboarding />} />
               <Route path="/cartas" element={<Cartas />} />
               <Route path="/mazo-fisico" element={<MazoFisico />} />
+              <Route path="/favoritos" element={<Favoritos />} />
               <Route path="/material-apoyo" element={<MaterialApoyo />} />
               <Route path="/novedades" element={<Novedades />} />
               <Route path="/creditos" element={<Creditos />} />

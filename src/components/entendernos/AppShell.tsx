@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Settings, BookOpen, Info, Lock, Layers, Sparkles, Bell, Home, FileText } from "lucide-react";
+import { Menu, X, Settings, BookOpen, Info, Lock, Layers, Sparkles, Bell, Home, FileText, Heart } from "lucide-react";
 import { playMenuSwish, playBack, playTick } from "@/lib/sounds";
 import { useFranja, type Franja } from "@/components/entendernos/FranjaContext";
 
@@ -11,6 +11,7 @@ const NAV = [
 ];
 
 const SECONDARY = [
+  { to: "/favoritos", label: "Favoritos", icon: Heart },
   { to: "/novedades", label: "Novedades", icon: Bell },
   { to: "/creditos", label: "Créditos", icon: Info },
   { to: "/privacidad", label: "Privacidad", icon: Lock },
