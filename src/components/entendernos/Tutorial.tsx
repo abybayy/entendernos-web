@@ -14,7 +14,7 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { targetId: "tut-deck-nav", body: "Elegí el rango de edad que prefieras", shape: "rect" },
+  { targetId: "tut-deck-nav", body: "Elegí la franja según la persona más joven del grupo", shape: "rect" },
   { targetId: "tut-card", body: "Leé la pregunta y escuchá con el corazón", shape: "rect" },
   { targetId: "tut-next", body: "Pasá a la siguiente carta cuando estén listos. ¡Lo más importante es el encuentro real!", shape: "rect" },
 ];
