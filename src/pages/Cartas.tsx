@@ -283,7 +283,7 @@ export default function Cartas() {
             <div className="mx-auto w-14 h-14 rounded-full grid place-items-center mb-3" style={{ background: styles.baseHex }}>
               <Heart className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-center text-[var(--carmesi)] text-xl mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>Qué lindo encuentro</h3>
+            <h3 className="text-center text-xl mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: styles.baseHex }}>Qué lindo encuentro</h3>
             <p className="text-center text-foreground/80 leading-snug mb-5">Esta fue solo una experiencia de prueba de todo lo que te espera en el mazo real.</p>
             <div className="flex flex-col gap-2">
               <button onClick={continueOtherLevel} className="w-full rounded-full py-3 font-semibold shadow-md hover:opacity-90 transition-opacity" style={{ background: nextStyles.baseHex, color: nextStyles.fg }}>
