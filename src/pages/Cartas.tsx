@@ -18,10 +18,10 @@ const DECK_FRANJA: Record<DeckId, "ninez" | "adolescencia" | "adultez"> = {
   ninos: "ninez",
 };
 
-const DECK_STYLES: Record<DeckId, { accentVar: string; fg: string; tabIcon: typeof Users }> = {
-  adulto: { accentVar: "var(--f-base)", fg: "#ffffff", tabIcon: Users },
-  adolescente: { accentVar: "var(--f-base)", fg: "#00302F", tabIcon: Sparkles },
-  ninos: { accentVar: "var(--f-base)", fg: "#ffffff", tabIcon: Smile },
+const DECK_STYLES: Record<DeckId, { accentVar: string; fg: string; tabIcon: typeof Users; baseHex: string }> = {
+  adulto: { accentVar: "var(--f-base)", fg: "#ffffff", tabIcon: Users, baseHex: "#133A59" },
+  adolescente: { accentVar: "var(--f-base)", fg: "#00302F", tabIcon: Sparkles, baseHex: "#69C0BE" },
+  ninos: { accentVar: "var(--f-base)", fg: "#ffffff", tabIcon: Smile, baseHex: "#FF3399" },
 };
 
 /** Título de una sola línea por franja (evita "Juego de prueba: ..." en doble línea). */
@@ -31,6 +31,13 @@ const DECK_TITLE: Record<DeckId, string> = {
   ninos: "Cartas para la Niñez",
 };
 
+/** Nombre de la franja para precargar en el mensaje de WhatsApp. */
+const DECK_AGE_LABEL: Record<DeckId, string> = {
+  adulto: "Adultez",
+  adolescente: "Adolescencia",
+  ninos: "Niñez",
+};
+
 /** Etiqueta del botón del modal final — lleva a la franja siguiente, nombrándola. */
 const DECK_NEXT_LABEL: Record<DeckId, string> = {
   adulto: "Ver cartas Adolescencia",
@@ -38,7 +45,11 @@ const DECK_NEXT_LABEL: Record<DeckId, string> = {
   ninos: "Ver cartas Adultez",
 };
 
-const WHATSAPP_URL = "https://wa.me/59898917770?text=" + encodeURIComponent("¡Hola! Me gustaría saber más información sobre el juego de cartas Entendernos");
+const buildWhatsAppUrl = (ageLabel: string) =>
+  "https://wa.me/59898917770?text=" +
+  encodeURIComponent(
+    `¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. Costo por transferencia\n2. Costo de envío dentro de Montevideo\n3. Tiempo estimado de entrega\n\nMe gustaría llevar el mazo para la edad de: ${ageLabel}`
+  );
 const SHARE_TEXT = "¡Hola! Te comparto la muestra digital de Entendernos 🃏✨. Es una app con preguntas diseñadas para hablar de lo que no se habla. No es para jugar online, ¡es para abrirla, dejar el celular sobre la mesa y charlar frente a frente!";
 
 export default function Cartas() {
@@ -79,12 +90,13 @@ export default function Cartas() {
 
   useEffect(() => { setFranja(DECK_FRANJA[activeDeck]); }, [activeDeck, setFranja]);
 
+  const DECK_ORDER: DeckId[] = ["adulto", "adolescente", "ninos"];
+  const nextDeckId = DECK_ORDER[(DECK_ORDER.indexOf(activeDeck) + 1) % DECK_ORDER.length];
+  const nextStyles = DECK_STYLES[nextDeckId];
+
   const continueOtherLevel = () => {
-    const order: DeckId[] = ["adulto", "adolescente", "ninos"];
-    const i = order.indexOf(activeDeck);
-    const nextDeck = order[(i + 1) % order.length];
     setCompletionOpen(false);
-    switchDeck(nextDeck);
+    switchDeck(nextDeckId);
   };
   const toggleFav = () => setFavorites((p) => { const n = new Set(p); n.has(qKey) ? n.delete(qKey) : n.add(qKey); return n; });
 
@@ -152,6 +164,7 @@ export default function Cartas() {
   const styles = DECK_STYLES[activeDeck];
   const deckTitle = DECK_TITLE[activeDeck];
   const franja = DECK_FRANJA[activeDeck];
+  const whatsappUrl = buildWhatsAppUrl(DECK_AGE_LABEL[activeDeck]);
 
   return (
     <AppShell title={deckTitle} franja={franja}>
@@ -221,7 +234,7 @@ export default function Cartas() {
         </h2>
 
         <div className="flex flex-col gap-3">
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#25D366] text-[#0b3d24] py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#1EBE5B] transition-colors">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#25D366] text-[#0b3d24] py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#1EBE5B] transition-colors">
             <WhatsAppIcon />
             Atención personalizada
           </a>
@@ -267,18 +280,16 @@ export default function Cartas() {
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-5">
           <div className="absolute inset-0 bg-black/50" onClick={() => setCompletionOpen(false)} aria-hidden />
           <div className="relative w-full max-w-sm bg-card rounded-[28px] border-2 border-[var(--carmesi)] p-6 shadow-2xl animate-in fade-in zoom-in-95">
-            <div className="mx-auto w-14 h-14 rounded-full grid place-items-center mb-3" style={{ background: styles.accentVar }}>
+            <div className="mx-auto w-14 h-14 rounded-full grid place-items-center mb-3" style={{ background: styles.baseHex }}>
               <Heart className="w-7 h-7 text-white" />
             </div>
             <h3 className="text-center text-[var(--carmesi)] text-xl mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>Qué lindo encuentro</h3>
             <p className="text-center text-foreground/80 leading-snug mb-5">Esta fue solo una experiencia de prueba de todo lo que te espera en el mazo real.</p>
             <div className="flex flex-col gap-2">
-              <button onClick={continueOtherLevel} className="w-full rounded-full py-3 font-semibold text-white shadow-md hover:opacity-90 transition-opacity" style={{ background: "var(--carmesi)" }}>
+              <button onClick={continueOtherLevel} className="w-full rounded-full py-3 font-semibold shadow-md hover:opacity-90 transition-opacity" style={{ background: nextStyles.baseHex, color: nextStyles.fg }}>
                 {DECK_NEXT_LABEL[activeDeck]}
               </button>
-              <Link to="/mazo-fisico" onClick={() => setCompletionOpen(false)} className="w-full rounded-full py-3 font-semibold text-center bg-muted text-[var(--azul-marino)] hover:bg-[var(--carmesi)]/10 transition-colors">
-                Comprar mazo
-              </Link>
+              <BuyDeckButton />
             </div>
           </div>
         </div>
