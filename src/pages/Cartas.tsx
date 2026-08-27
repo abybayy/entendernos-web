@@ -263,7 +263,7 @@ export default function Cartas() {
         </p>
 
         <button onClick={handleShareProject} className="mt-5 w-full bg-card border rounded-full py-3 font-medium text-sm hover:bg-muted transition-colors flex items-center justify-center gap-2" style={{ color: "var(--azul-marino)", borderColor: "color-mix(in oklab, var(--azul-marino) 25%, transparent)" }}>
-          Compartir este proyecto <Share2 className="w-4 h-4" />
+          Compartilo <Share2 className="w-4 h-4" />
         </button>
 
         <div className="mt-6 flex justify-center gap-6 text-sm" style={{ color: "var(--deck-fg, var(--muted-foreground))" }}>

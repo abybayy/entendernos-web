@@ -3,7 +3,7 @@ import { WhatsAppIcon } from "@/components/entendernos/BrandIcons";
 import { BuyDeckButton } from "@/components/entendernos/BuyDeckButton";
 import mazosImg from "@/assets/mazos-fisicos.webp";
 
-const WHATSAPP_TEXT = "¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. Costo por transferencia\n2. Costo de envío dentro de Montevideo\n3. Tiempo estimado de entrega\n\nMe gustaría llevar el mazo para la edad de: ";
+const WHATSAPP_TEXT = "¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. ¿Cuál es el número de cuenta para transferir $550 por un mazo?\n2. ¿Cuentan con envío dentro de Montevideo o al interior?\n3. ¿Qué tiempo tiene de entrega a partir del pago?\n\nMe gustaría llevar el mazo para la edad de: ";
 const WHATSAPP_URL = "https://wa.me/59898917770?text=" + encodeURIComponent(WHATSAPP_TEXT);
 
 export default function MazoFisico() {
