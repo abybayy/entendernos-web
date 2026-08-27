@@ -2,9 +2,10 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped to v4: los 3 pasos enfocan el elemento real en pantalla (recuadro + resto
-// oscurecido), incluyendo el paso de la carta (id="tut-card"), en vez de una miniatura simulada.
-const KEY = "entendernos:tutorial:done:v4";
+// Bumped to v5: la burbuja se ancla arriba o abajo según en qué mitad de la
+// pantalla esté el elemento enfocado, para nunca taparlo (antes quedaba siempre
+// abajo y ocultaba el foco cuando el elemento estaba en la parte baja, ej. paso 1).
+const KEY = "entendernos:tutorial:done:v5";
 
 type Step = {
   targetId: string | null;
@@ -93,6 +94,11 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
   const padded = rect ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 } : null;
   const radius = s.shape === "pill" ? 9999 : 20;
 
+  // Si el foco cae en la mitad inferior de la pantalla, la burbuja se ancla arriba
+  // (así nunca lo tapa); si no, se ancla abajo como de costumbre.
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const dockTop = !!rect && rect.top + rect.height / 2 > vh * 0.55;
+
   return (
     <div className="fixed inset-0 z-[60] pointer-events-auto">
       {/* Dim layer, with cutout only when a real target is being spotlighted */}
@@ -121,11 +127,16 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
         />
       )}
 
-      {/* Bubble — always a fixed bottom sheet, so it never falls outside the viewport
-          regardless of card height, and the whole tutorial fits on one screen. */}
+      {/* Bubble — se ancla arriba o abajo (dockTop) según en qué mitad de la pantalla
+          esté el elemento enfocado, para que el recuadro de foco nunca quede tapado. */}
       <div
-        className="fixed left-1/2 bottom-0 -translate-x-1/2 w-full text-white rounded-t-3xl px-5 pt-4 shadow-2xl"
-        style={{ background: TUT_BLUE, maxWidth: 420, paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+        className={`fixed left-1/2 -translate-x-1/2 w-full text-white px-5 shadow-2xl ${dockTop ? "top-0 rounded-b-3xl pb-4" : "bottom-0 rounded-t-3xl pt-4"}`}
+        style={{
+          background: TUT_BLUE,
+          maxWidth: 420,
+          paddingTop: dockTop ? "max(1rem, env(safe-area-inset-top))" : undefined,
+          paddingBottom: dockTop ? undefined : "max(1rem, env(safe-area-inset-bottom))",
+        }}
       >
         <div className="flex items-center gap-2 mb-2">
           <span className="w-8 h-8 rounded-full bg-white grid place-items-center text-sm font-bold shrink-0" style={{ color: TUT_BLUE }}>{step + 1}</span>

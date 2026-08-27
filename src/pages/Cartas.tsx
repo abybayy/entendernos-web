@@ -121,7 +121,7 @@ export default function Cartas() {
   }, [timer, currentIdx, activeDeck, paused, tutorialOpen]);
 
   const handleShare = async () => {
-    const text = `${question}\n\n— Entendernos · Mazo ${deck.name}`;
+    const text = `${question}\n\n- Entendernos · Mazo ${deck.name}`;
     try {
       const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
       if (typeof nav.share === "function") await nav.share({ title: "Entendernos", text });

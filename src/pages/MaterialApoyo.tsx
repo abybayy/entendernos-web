@@ -8,7 +8,7 @@ export default function MaterialApoyo() {
     <AppShell title="Material de apoyo">
       <div className="px-5 pt-6 pb-12 space-y-6">
         <p className="text-foreground/80 leading-relaxed text-sm">
-          Recursos descargables pensados para acompañar el uso del mazo en ámbitos educativos, terapéuticos y familiares. Aplica para las tres franjas del juego — Niñez, Adolescencia y Adultez.
+          Recursos descargables pensados para acompañar el uso del mazo en ámbitos educativos, terapéuticos y familiares. Aplica para las tres franjas del juego: Niñez, Adolescencia y Adultez.
         </p>
 
         <article className="rounded-3xl border border-[var(--carmesi)]/15 bg-card shadow-sm overflow-hidden">
@@ -19,12 +19,12 @@ export default function MaterialApoyo() {
               </span>
               <div className="flex-1 min-w-0">
                 <span className="inline-block text-[10px] font-semibold tracking-wider uppercase text-[var(--carmesi)] bg-[var(--carmesi)]/10 px-2 py-0.5 rounded-full mb-2">Manual oficial</span>
-                <h2 className="text-foreground font-bold leading-snug" style={{ fontFamily: "var(--font-display)" }}>Guía Oficial de Uso y Convivencia — Juego Entendernos</h2>
+                <h2 className="text-foreground font-bold leading-snug" style={{ fontFamily: "var(--font-display)" }}>Guía Oficial de Uso y Convivencia: Juego Entendernos</h2>
               </div>
             </div>
 
             <p className="text-sm text-foreground/80 leading-relaxed">
-              El manual definitivo para moderadores, educadores y familias. Incluye pautas de uso responsable, variantes de juego dinámicas <strong>(Modo Ronda, Modo Libre, Modo Reto)</strong> y recomendaciones metodológicas para el abordaje en ámbitos educativos, terapéuticos y familiares, válidas para cualquiera de las tres franjas de edad del mazo.
+              El manual definitivo para moderadores, educadores y familias. Incluye pautas de uso responsable, variantes de juego dinámicas <strong>(Modo Ronda, Modo Libre, Modo Reto)</strong> y recomendaciones metodológicas para sacarle el máximo provecho al mazo.
             </p>
 
             <a
@@ -48,7 +48,7 @@ export default function MaterialApoyo() {
 
         <div className="rounded-2xl bg-[var(--carmesi)]/8 border border-[var(--carmesi)]/10 p-4">
           <p className="text-xs text-foreground/75 leading-relaxed text-center">
-            Esta guía metodológica está diseñada tanto para acompañar tu mazo físico —sea cual sea la franja que elijas— como para descubrir el potencial pedagógico y de conexión de la herramienta antes de adquirirla.
+            Esta guía está pensada tanto para acompañar tu mazo físico como para descubrir su potencial pedagógico y de conexión antes de adquirirlo.
           </p>
         </div>
       </div>
