@@ -84,10 +84,15 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
 
   const padded = rect ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 } : null;
 
-  // Si el foco cae en la mitad inferior de la pantalla, la burbuja se apoya justo
-  // sobre su borde superior (pegada, sin flecha); si no, se ancla abajo como de costumbre.
+  // La burbuja se apoya pegada sobre el borde superior del foco solo si arriba
+  // del foco hay lugar real para que entre (alto típico de la burbuja + margen).
+  // Antes se decidía según el CENTRO del foco vs. la mitad de la pantalla, pero
+  // eso fallaba con focos altos que empiezan cerca del techo (como la tarjeta del
+  // paso 2): su centro cae "abajo" aunque su borde superior esté a pocos px del
+  // techo, y la burbuja terminaba naciendo por fuera de la pantalla, cortada.
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  const dockAbove = !!padded && padded.top + padded.height / 2 > vh * 0.55;
+  const MIN_SPACE_ABOVE = 210;
+  const dockAbove = !!padded && padded.top >= MIN_SPACE_ABOVE;
   // "bottom" en vez de "top": así no hace falta medir el alto de la burbuja para
   // que su borde inferior quede justo GAP px por encima del borde del foco.
   const GAP = 10;
