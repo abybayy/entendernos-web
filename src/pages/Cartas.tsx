@@ -121,11 +121,12 @@ export default function Cartas() {
   }, [timer, currentIdx, activeDeck, paused, tutorialOpen]);
 
   const handleShare = async () => {
+    const url = typeof window !== "undefined" ? window.location.origin : "https://entendernos.com";
     const text = `${question}\n\n- Entendernos · Mazo ${deck.name}`;
     try {
       const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
-      if (typeof nav.share === "function") await nav.share({ title: "Entendernos", text });
-      else if (nav.clipboard) { await nav.clipboard.writeText(text); toast.success("Pregunta copiada"); }
+      if (typeof nav.share === "function") await nav.share({ title: "Entendernos", text, url });
+      else if (nav.clipboard) { await nav.clipboard.writeText(`${text}\n${url}`); toast.success("Pregunta copiada"); }
     } catch (err) { if ((err as DOMException)?.name !== "AbortError") toast.error("No se pudo compartir"); }
   };
 
@@ -215,13 +216,9 @@ export default function Cartas() {
           </div>
         </div>
 
-        <h2 className="mt-8 mb-1 font-bold flex items-center justify-center gap-2 text-center" style={{ fontFamily: "var(--font-display)", color: "var(--deck-fg, var(--foreground))" }}>
-          <Sparkles className="w-5 h-5" style={{ color: "var(--deck-fg, var(--carmesi))" }} /> Adquirir Mazo Físico Real
+        <h2 className="mt-8 mb-3 font-bold flex items-center justify-center gap-2 text-center" style={{ fontFamily: "var(--font-display)", color: "var(--deck-fg, var(--foreground))" }}>
+          <Sparkles className="w-5 h-5" style={{ color: "var(--deck-fg, var(--carmesi))" }} /> ¿Querés adquirir el mazo completo?
         </h2>
-        <p className="text-sm mb-1 text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.9 }}>Lleva la conexión al siguiente nivel</p>
-        <p className="text-xs mb-3 text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.75 }}>
-          Un solo mazo, válido para las 3 franjas. Al coordinar el envío o retiro te preguntamos cuál querés.
-        </p>
 
         <div className="flex flex-col gap-3">
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#25D366] text-[#0b3d24] py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#1EBE5B] transition-colors">
@@ -230,6 +227,9 @@ export default function Cartas() {
           </a>
           <BuyDeckButton />
         </div>
+        <p className="mt-2 text-xs text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.75 }}>
+          Tu compra por Mercado Pago es válida para las 3 franjas: indicás el mazo que querés al coordinar el envío o retiro.
+        </p>
 
         <button onClick={handleShareProject} className="mt-5 w-full bg-card border rounded-full py-3 font-medium text-sm hover:bg-muted transition-colors flex items-center justify-center gap-2" style={{ color: "var(--azul-marino)", borderColor: "color-mix(in oklab, var(--azul-marino) 25%, transparent)" }}>
           Compartir este proyecto <Share2 className="w-4 h-4" />
