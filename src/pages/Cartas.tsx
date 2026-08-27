@@ -105,7 +105,16 @@ export default function Cartas() {
       const wasFav = n.has(qKey);
       wasFav ? n.delete(qKey) : n.add(qKey);
       saveFavorites(n);
-      if (!wasFav) toast.success("¡Gracias! Nos ayuda a saber qué preguntas les llegan más 💛");
+      if (!wasFav) {
+        toast.success("¡Gracias! Nos ayuda a saber qué preguntas les llegan más 💛");
+        // Suma anónima (sin identificar a quién la marcó) para saber qué preguntas
+        // conectan más. Si falla (sin conexión, etc.) no afecta la experiencia.
+        fetch("/api/fav", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ qKey }),
+        }).catch(() => {});
+      }
       return n;
     });
 

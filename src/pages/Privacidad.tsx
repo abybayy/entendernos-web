@@ -10,10 +10,13 @@ export default function Privacidad() {
           <strong>Entendernos no recopila datos personales</strong> sin tu consentimiento.
         </p>
         <p>
-          Las preguntas que marcás como favoritas se guardan <strong>únicamente en la memoria local de tu propio dispositivo</strong> (el mismo lugar donde el navegador guarda tus contraseñas o configuraciones): no viajan a ningún servidor ni se comparten con nadie, ni siquiera con nosotros. Si borrás los datos del navegador o cambiás de dispositivo, esa lista se pierde.
+          La <strong>lista de tus preguntas favoritas</strong> (para que puedas volver a verlas) se guarda <strong>únicamente en la memoria local de tu propio dispositivo</strong>, el mismo lugar donde el navegador guarda tus contraseñas o configuraciones: no viaja a ningún servidor ni se comparte con nadie. Si borrás los datos del navegador o cambiás de dispositivo, esa lista se pierde.
         </p>
         <p>
-          Para saber cuánta gente visita la app usamos <strong>Cloudflare Web Analytics</strong>, una herramienta que <strong>no usa cookies y no identifica a cada visitante</strong>: solo cuenta estadísticas generales y anónimas (como cuántas visitas hay o desde qué página se llega), nunca cuáles preguntas leíste o marcaste como favoritas.
+          Por separado, cada vez que se marca una pregunta como favorita sumamos <strong>+1 a un contador anónimo de esa pregunta</strong>, sin ningún dato que identifique quién la marcó (ni nombre, ni ubicación, ni dispositivo): así podemos ver qué preguntas conectan más para mejorar el mazo, sin saber nunca quién marcó qué.
+        </p>
+        <p>
+          Para saber cuánta gente visita la app usamos <strong>Cloudflare Web Analytics</strong>, una herramienta que <strong>no usa cookies y no identifica a cada visitante</strong>: solo cuenta estadísticas generales y anónimas, como cuántas visitas hay o desde qué página se llega.
         </p>
         <p><strong>No compartimos tu información con terceros.</strong></p>
       </div>
