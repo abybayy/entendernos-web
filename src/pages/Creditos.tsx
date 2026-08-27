@@ -6,7 +6,7 @@ export default function Creditos() {
   const items: { role: string; name: string; href?: string }[] = [
     { role: "Lic. en Psicología · Especialista en Psicogerontología", name: "Mateo García Moreno", href: "https://www.instagram.com/psico.mateogarcia" },
     { role: "Lic. en Diseño de Comunicación Visual · Diplomada en Diseño de Experiencia de Usuario", name: "Victoria Abigail Huayhuaca", href: "https://www.behance.net/vhuayhuaca" },
-    { role: "Desarrollo en colaboración con", name: "Claude y Lovable" },
+    { role: "Desarrollo en colaboración con", name: "Claude" },
   ];
   return (
     <AppShell title="Créditos">
@@ -34,7 +34,7 @@ export default function Creditos() {
           })}
         </div>
 
-        <p className="mt-10 text-xs text-muted-foreground">© 2024 Entendernos</p>
+        <p className="mt-10 text-xs text-muted-foreground">© {new Date().getFullYear()} Entendernos</p>
       </div>
     </AppShell>
   );

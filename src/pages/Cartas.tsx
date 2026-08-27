@@ -270,7 +270,7 @@ export default function Cartas() {
           <Link to="/creditos" className="hover:underline opacity-90 hover:opacity-100" style={{ color: "inherit" }}>Créditos</Link>
           <Link to="/privacidad" className="hover:underline opacity-90 hover:opacity-100" style={{ color: "inherit" }}>Privacidad</Link>
         </div>
-        <p className="mt-2 text-xs text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.85 }}>© 2024 Entendernos · Diseñado para la conexión humana</p>
+        <p className="mt-2 text-xs text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.85 }}>© {new Date().getFullYear()} Entendernos · Diseñado para la conexión humana</p>
 
         <div className="h-24" />
       </div>
