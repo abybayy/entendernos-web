@@ -31,7 +31,7 @@
 :root {
   --radius: 1rem;
   --cyan-pastel: oklch(0.91 0.06 215);
-  --carmesi: #FF1D65;
+  --carmesi: #FF3399;
   --azul-marino: oklch(0.28 0.07 250);
   --rosa-cerebro: oklch(0.72 0.18 15);
 
@@ -48,8 +48,8 @@
 
 /* Franjas de edad — tokens de color por franja. */
 [data-franja="ninez"] {
-  --f-base: #FF1D65;
-  --f-ink: #83002A;
+  --f-base: #FF3399;
+  --f-ink: #830042;
   --f-bg: #FFF2F7;
 }
 

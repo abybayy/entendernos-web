@@ -22,11 +22,27 @@ export function Logo({ className = "" }: { className?: string }) {
 
 export function Isotipo({ className = "", size = 64 }: { className?: string; size?: number }) {
   return (
-    <svg viewBox="0 0 100 100" width={size} height={size} className={className} aria-hidden="true">
-      <circle cx="50" cy="50" r="48" fill="white" stroke="var(--azul-marino)" strokeWidth="2" />
-      <path d="M30 78 C25 70 22 60 24 48 C26 30 40 18 56 20 C72 22 80 36 80 50 L80 78 Z" fill="var(--azul-marino)" />
-      <path d="M40 42 C40 34 48 30 54 33 C60 28 70 32 70 42 C72 46 70 52 64 54 C62 60 52 60 48 56 C42 56 38 50 40 42 Z" fill="var(--rosa-cerebro)" />
-      <path d="M55 44 C53 41 49 41 49 45 C49 49 55 52 55 52 C55 52 61 49 61 45 C61 41 57 41 55 44 Z" fill="var(--cyan-pastel)" />
+    <svg viewBox="0 0 200 200" width={size} height={size} className={className} aria-hidden="true">
+      <circle cx="100" cy="100" r="96" fill="#7BC4E8" />
+      <circle cx="100" cy="100" r="84" fill="white" />
+      <circle cx="100" cy="100" r="80" fill="none" stroke="var(--azul-marino)" strokeWidth="3" />
+      <path
+        d="M 95,38 C 118,40 132,55 136,72 C 140,84 141,96 139,105 C 148,108 150,118 145,124 C 141,129 135,130 130,128 C 133,135 130,142 122,146 C 118,148 112,148 106,146 L 106,142 L 98,142 L 98,148 L 60,148 C 46,148 40,130 40,108 C 40,80 55,55 78,44 C 84,41 90,39 95,38 Z"
+        fill="#7BC4E8" stroke="var(--azul-marino)" strokeWidth="3.2" strokeLinejoin="round"
+      />
+      <path
+        d="M 78,68 C 72,60 60,60 57,68 C 48,68 44,78 48,85 C 42,90 43,100 50,104 C 48,111 53,118 61,118 C 60,126 70,132 78,127 C 84,133 95,132 99,125 C 106,130 116,125 116,117 C 123,116 126,108 122,102 C 128,97 126,88 119,85 C 121,77 114,69 105,71 C 104,63 93,60 87,66 C 84,63 80,64 78,68 Z M 58,118 C 56,124 54,130 50,134 C 54,131 60,127 61,120 Z"
+        fill="var(--rosa-cerebro)" stroke="var(--azul-marino)" strokeWidth="3" strokeLinejoin="round" strokeLinecap="round"
+      />
+      <path d="M 66,76 C 70,80 70,86 65,89" fill="none" stroke="var(--azul-marino)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 90,68 C 88,74 92,79 98,78" fill="none" stroke="var(--azul-marino)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 108,80 C 112,84 111,90 106,92" fill="none" stroke="var(--azul-marino)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 56,96 C 60,98 60,103 56,105" fill="none" stroke="var(--azul-marino)" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 112,100 C 116,102 116,107 112,109" fill="none" stroke="var(--azul-marino)" strokeWidth="2" strokeLinecap="round" />
+      <path
+        d="M 89,92 C 89,86 82,83 78,88 C 74,93 76,99 89,110 C 102,99 104,93 100,88 C 96,83 89,86 89,92 Z"
+        fill="var(--cyan-pastel)" stroke="var(--azul-marino)" strokeWidth="3" strokeLinejoin="round"
+      />
     </svg>
   );
 }
