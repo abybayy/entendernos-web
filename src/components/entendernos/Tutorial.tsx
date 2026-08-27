@@ -2,10 +2,9 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped to v5: la burbuja se ancla arriba o abajo según en qué mitad de la
-// pantalla esté el elemento enfocado, para nunca taparlo (antes quedaba siempre
-// abajo y ocultaba el foco cuando el elemento estaba en la parte baja, ej. paso 1).
-const KEY = "entendernos:tutorial:done:v5";
+// Bumped to v6: cuando el foco está abajo, la burbuja flota centrada en la
+// pantalla en vez de pegarse al borde superior (menos salto visual entre pasos).
+const KEY = "entendernos:tutorial:done:v6";
 
 type Step = {
   targetId: string | null;
@@ -127,14 +126,18 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
         />
       )}
 
-      {/* Bubble — se ancla arriba o abajo (dockTop) según en qué mitad de la pantalla
-          esté el elemento enfocado, para que el recuadro de foco nunca quede tapado. */}
+      {/* Bubble — cuando el foco está en la mitad inferior (dockTop), la burbuja flota
+          centrada en la pantalla (evita el salto brusco de la mirada entre pasos);
+          si no, queda anclada abajo como panel fijo. */}
       <div
-        className={`fixed left-1/2 -translate-x-1/2 w-full text-white px-5 shadow-2xl ${dockTop ? "top-0 rounded-b-3xl pb-4" : "bottom-0 rounded-t-3xl pt-4"}`}
+        className={
+          dockTop
+            ? "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2.5rem)] text-white px-5 py-5 rounded-3xl shadow-2xl"
+            : "fixed left-1/2 bottom-0 -translate-x-1/2 w-full text-white px-5 pt-4 rounded-t-3xl shadow-2xl"
+        }
         style={{
           background: TUT_BLUE,
           maxWidth: 420,
-          paddingTop: dockTop ? "max(1rem, env(safe-area-inset-top))" : undefined,
           paddingBottom: dockTop ? undefined : "max(1rem, env(safe-area-inset-bottom))",
         }}
       >
