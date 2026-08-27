@@ -33,34 +33,30 @@ export function AppShell({ title = "Menú", children, franja }: { title?: string
 
   return (
     <div data-franja={activeFranja} className="min-h-screen flex flex-col transition-colors duration-500" style={{ background: "var(--deck-bg, var(--background))" }}>
-      <header className="border-b border-[var(--carmesi)]/10">
-        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 pt-5 pb-3">
-          {isHome ? (
-            <span aria-hidden className="p-1 w-8 h-8" />
-          ) : (
+      {/* En Home no hay título, ni ícono de casa, ni menú — el header quedaba vacío
+          y generaba un espacio en blanco arriba. Se omite por completo en esa pantalla. */}
+      {!isHome && (
+        <header className="border-b border-[var(--carmesi)]/10">
+          <div className="max-w-3xl mx-auto flex items-center justify-between px-5 pt-5 pb-3">
             <Link to="/" aria-label="Inicio" className="p-1 hover:opacity-80 transition" style={{ color: "var(--deck-header-fg, var(--azul-marino))" }}>
               <Home className="w-6 h-6" />
             </Link>
-          )}
-          {title ? (
-            <h1
-              className="text-[var(--carmesi)] tracking-wide whitespace-nowrap"
-              style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--deck-header-fg, var(--azul-marino))", fontSize: "clamp(1rem, 4.6vw, 1.25rem)" }}
-            >
-              {title}
-            </h1>
-          ) : (
-            <span aria-hidden className="h-6" />
-          )}
-          {isHome ? (
-            <span aria-hidden className="p-1 w-8 h-8" />
-          ) : (
+            {title ? (
+              <h1
+                className="text-[var(--carmesi)] tracking-wide whitespace-nowrap"
+                style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--deck-header-fg, var(--azul-marino))", fontSize: "clamp(1rem, 4.6vw, 1.25rem)" }}
+              >
+                {title}
+              </h1>
+            ) : (
+              <span aria-hidden className="h-6" />
+            )}
             <button data-sfx="none" onClick={() => { playMenuSwish(); setOpen(true); }} className="p-1 transition" style={{ color: "var(--deck-header-fg, var(--azul-marino))" }} aria-label="Menú">
               <Menu className="w-6 h-6" />
             </button>
-          )}
-        </div>
-      </header>
+          </div>
+        </header>
+      )}
 
       <main className="flex-1 w-full max-w-md mx-auto">{children}</main>
 

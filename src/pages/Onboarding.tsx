@@ -30,7 +30,7 @@ export default function Onboarding() {
 
   return (
     <AppShell title="">
-      <div className="flex flex-col items-center px-6 pt-4 pb-6">
+      <div className="flex flex-col items-center px-6 pb-6" style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top))" }}>
         <a
           href={INSTAGRAM_URL}
           target="_blank"

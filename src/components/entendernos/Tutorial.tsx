@@ -1,10 +1,25 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped to v6: cuando el foco está abajo, la burbuja flota centrada en la
-// pantalla en vez de pegarse al borde superior (menos salto visual entre pasos).
-const KEY = "entendernos:tutorial:done:v6";
+// Bumped to v7: una flecha conecta la burbuja con la zona enfocada cuando están
+// lejos entre sí, para que el ojo encuentre rápido a dónde mirar.
+const KEY = "entendernos:tutorial:done:v7";
+
+/** Punto donde el segmento centro-A → centro-B cruza el borde del rect A. */
+function edgePoint(rect: { top: number; left: number; width: number; height: number }, towardX: number, towardY: number) {
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const dx = towardX - cx;
+  const dy = towardY - cy;
+  if (dx === 0 && dy === 0) return { x: cx, y: cy };
+  const halfW = rect.width / 2;
+  const halfH = rect.height / 2;
+  const scaleX = dx !== 0 ? halfW / Math.abs(dx) : Infinity;
+  const scaleY = dy !== 0 ? halfH / Math.abs(dy) : Infinity;
+  const scale = Math.min(scaleX, scaleY);
+  return { x: cx + dx * scale, y: cy + dy * scale };
+}
 
 type Step = {
   targetId: string | null;
@@ -25,6 +40,8 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
+  const [bubbleRect, setBubbleRect] = useState<DOMRect | null>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (force) {
@@ -81,6 +98,24 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
     };
   }, [open, step, s.targetId]);
 
+  const padded = rect ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 } : null;
+
+  // Si el foco cae en la mitad inferior de la pantalla, la burbuja se ancla arriba
+  // (así nunca lo tapa); si no, se ancla abajo como de costumbre.
+  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
+  const dockTop = !!rect && rect.top + rect.height / 2 > vh * 0.55;
+
+  // Mide la burbuja después de que se ubica (arriba/centro/abajo) para poder
+  // dibujar la flecha que la conecta con la zona enfocada.
+  useLayoutEffect(() => {
+    if (!open) { setBubbleRect(null); return; }
+    let raf = 0;
+    const measure = () => setBubbleRect(bubbleRef.current ? bubbleRef.current.getBoundingClientRect() : null);
+    raf = requestAnimationFrame(measure);
+    const t1 = window.setTimeout(measure, 130);
+    return () => { cancelAnimationFrame(raf); clearTimeout(t1); };
+  }, [open, step, dockTop]);
+
   if (!open) return null;
 
   const last = step === STEPS.length - 1;
@@ -90,13 +125,22 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
     onClose?.();
   };
 
-  const padded = rect ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 } : null;
   const radius = s.shape === "pill" ? 9999 : 20;
 
-  // Si el foco cae en la mitad inferior de la pantalla, la burbuja se ancla arriba
-  // (así nunca lo tapa); si no, se ancla abajo como de costumbre.
-  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  const dockTop = !!rect && rect.top + rect.height / 2 > vh * 0.55;
+  // Flecha burbuja → foco, solo si están lo bastante lejos como para que ayude.
+  let arrow: { x1: number; y1: number; x2: number; y2: number } | null = null;
+  if (padded && bubbleRect) {
+    const targetCx = padded.left + padded.width / 2;
+    const targetCy = padded.top + padded.height / 2;
+    const bubbleCx = bubbleRect.left + bubbleRect.width / 2;
+    const bubbleCy = bubbleRect.top + bubbleRect.height / 2;
+    const dist = Math.hypot(targetCx - bubbleCx, targetCy - bubbleCy);
+    if (dist > 90) {
+      const p1 = edgePoint(bubbleRect, targetCx, targetCy);
+      const p2 = edgePoint(padded, bubbleCx, bubbleCy);
+      arrow = { x1: p1.x, y1: p1.y, x2: p2.x, y2: p2.y };
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-[60] pointer-events-auto">
@@ -107,8 +151,18 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
             <rect width="100%" height="100%" fill="white" />
             {padded && <rect x={padded.left} y={padded.top} width={padded.width} height={padded.height} rx={radius} ry={radius} fill="black" />}
           </mask>
+          <marker id="entendernos-tut-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="white" />
+          </marker>
         </defs>
         <rect width="100%" height="100%" fill="rgba(19, 58, 89, 0.72)" mask="url(#entendernos-tut-mask)" />
+        {arrow && (
+          <line
+            x1={arrow.x1} y1={arrow.y1} x2={arrow.x2} y2={arrow.y2}
+            stroke="white" strokeWidth={3} strokeLinecap="round" strokeDasharray="1 10"
+            markerEnd="url(#entendernos-tut-arrowhead)" opacity={0.9}
+          />
+        )}
       </svg>
 
       {padded && (
@@ -130,6 +184,7 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
           centrada en la pantalla (evita el salto brusco de la mirada entre pasos);
           si no, queda anclada abajo como panel fijo. */}
       <div
+        ref={bubbleRef}
         className={
           dockTop
             ? "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2.5rem)] text-white px-5 py-5 rounded-3xl shadow-2xl"
