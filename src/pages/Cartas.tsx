@@ -297,7 +297,7 @@ export default function Cartas() {
       {completionOpen && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-5">
           <div className="absolute inset-0 bg-black/50" onClick={() => setCompletionOpen(false)} aria-hidden />
-          <div className="relative w-full max-w-sm bg-card rounded-[28px] border-2 border-[var(--carmesi)] p-6 shadow-2xl animate-in fade-in zoom-in-95">
+          <div className="relative w-full max-w-sm bg-card rounded-[28px] border-2 p-6 shadow-2xl animate-in fade-in zoom-in-95" style={{ borderColor: styles.baseHex }}>
             <div className="mx-auto w-14 h-14 rounded-full grid place-items-center mb-3" style={{ background: styles.baseHex }}>
               <Heart className="w-7 h-7 text-white" />
             </div>
