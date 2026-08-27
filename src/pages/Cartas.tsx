@@ -106,7 +106,7 @@ export default function Cartas() {
       wasFav ? n.delete(qKey) : n.add(qKey);
       saveFavorites(n);
       if (!wasFav) {
-        toast.success("¡Gracias! Nos ayuda a saber qué preguntas les llegan más 💛");
+        toast.success("¡Gracias! Nos re sirve para saber qué preguntas les llegan más 💛");
         // Suma anónima (sin identificar a quién la marcó) para saber qué preguntas
         // conectan más. Si falla (sin conexión, etc.) no afecta la experiencia.
         fetch("/api/fav", {

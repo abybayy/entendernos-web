@@ -1,10 +1,19 @@
 import { Instagram } from "lucide-react";
 import { AppShell } from "@/components/entendernos/AppShell";
+import { InstagramEmbed } from "@/components/entendernos/InstagramEmbed";
 import newsLascano from "@/assets/news-lascano.jpg";
 import newsChuy from "@/assets/news-chuy.jpg";
 import newsRadio from "@/assets/news-radio.jpg";
 
 const INSTA_URL = "https://instagram.com/psico.mateogarcia";
+
+// Publicaciones reales de @psico.mateogarcia, embebidas en vivo desde Instagram
+// (oEmbed oficial): siempre muestran el contenido, likes y comentarios actuales.
+// Para sumar o cambiar una, solo hace falta pegar el link de la publicación acá.
+const INSTA_POSTS = [
+  "https://www.instagram.com/p/DRNuw4gkpQH/",
+  "https://www.instagram.com/psico.mateogarcia/reel/DcUmeY0NHzA/",
+];
 
 const ITEMS = [
   {
@@ -35,11 +44,17 @@ export default function Novedades() {
     <AppShell title="Novedades">
       <div className="px-5 pt-5 pb-12 space-y-5">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-bold text-muted-foreground tracking-wider">RECIENTES</p>
+          <p className="text-xs font-bold text-muted-foreground tracking-wider">DESDE INSTAGRAM</p>
           <a href={INSTA_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[var(--carmesi)] hover:underline">
             <Instagram className="w-4 h-4" /> @psico.mateogarcia
           </a>
         </div>
+
+        {INSTA_POSTS.map((url) => (
+          <InstagramEmbed key={url} url={url} />
+        ))}
+
+        <p className="text-xs font-bold text-muted-foreground tracking-wider pt-2">RECIENTES</p>
 
         {ITEMS.map((it) => (
           <article key={it.title} className="rounded-[24px] border border-[var(--carmesi)]/15 bg-card overflow-hidden">

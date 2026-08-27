@@ -18,6 +18,9 @@ export default function Privacidad() {
         <p>
           Para saber cuánta gente visita la app usamos <strong>Cloudflare Web Analytics</strong>, una herramienta que <strong>no usa cookies y no identifica a cada visitante</strong>: solo cuenta estadísticas generales y anónimas, como cuántas visitas hay o desde qué página se llega.
         </p>
+        <p>
+          En Novedades mostramos publicaciones reales embebidas directo desde Instagram: al ver esa sección, Instagram (Meta) puede registrar la visita, igual que en cualquier sitio con contenido social embebido. No pedimos ni guardamos tu email en ningún lado de la app.
+        </p>
         <p><strong>No compartimos tu información con terceros.</strong></p>
       </div>
     </AppShell>
