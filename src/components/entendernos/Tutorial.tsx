@@ -2,10 +2,9 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped to v3: bubble is now a fixed bottom sheet (fixes step 2 falling off-screen
-// on tall/vertical cards) and step 2 shows a mini card preview instead of spotlighting
-// the real, full-size card.
-const KEY = "entendernos:tutorial:done:v3";
+// Bumped to v4: los 3 pasos enfocan el elemento real en pantalla (recuadro + resto
+// oscurecido), incluyendo el paso de la carta (id="tut-card"), en vez de una miniatura simulada.
+const KEY = "entendernos:tutorial:done:v4";
 
 type Step = {
   targetId: string | null;
@@ -15,25 +14,12 @@ type Step = {
 
 const STEPS: Step[] = [
   { targetId: "tut-deck-nav", body: "Elegí el rango de edad que prefieras", shape: "rect" },
-  { targetId: null, body: "Leé la pregunta y escuchá con el corazón", shape: "rect" },
+  { targetId: "tut-card", body: "Leé la pregunta y escuchá con el corazón", shape: "rect" },
   { targetId: "tut-next", body: "Pasá a la siguiente carta cuando estén listos. ¡Lo más importante es el encuentro real!", shape: "rect" },
 ];
 
 const PAD = 8;
 const TUT_BLUE = "#133A59";
-
-/** Mini, non-interactive preview of a card — used on the step that talks about the card itself. */
-function MiniCardPreview() {
-  return (
-    <div className="mx-auto w-40 rounded-2xl border-2 bg-white shadow-md pt-3 px-3 pb-3 flex flex-col items-center gap-2" style={{ borderColor: "#69C0BE" }}>
-      <div className="h-1 w-16 rounded-full bg-black/10" />
-      <p className="text-center text-[11px] leading-snug font-semibold" style={{ color: TUT_BLUE, fontFamily: "var(--font-display)" }}>
-        ¿Qué lugar te hace sentir en paz?
-      </p>
-      <div className="h-6 w-full rounded-full" style={{ background: "#69C0BE" }} />
-    </div>
-  );
-}
 
 export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boolean; onClose?: () => void; onOpenChange?: (open: boolean) => void }) {
   const [open, setOpen] = useState(false);
@@ -147,11 +133,6 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
         </div>
 
         <p className="text-base leading-snug mb-3">{s.body}</p>
-        {!s.targetId && (
-          <div className="mb-3">
-            <MiniCardPreview />
-          </div>
-        )}
 
         <div className="flex items-center justify-between gap-2">
           <div className="flex gap-1.5 shrink-0">

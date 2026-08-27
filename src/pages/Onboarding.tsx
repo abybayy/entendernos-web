@@ -9,10 +9,11 @@ import { BuyDeckButton } from "@/components/entendernos/BuyDeckButton";
 const INSTAGRAM_URL = "https://www.instagram.com/psico.mateogarcia";
 
 export default function Onboarding() {
-  // Home identity: degradé sancionado por el sistema de diseño (azul profundo → celeste).
+  // Home identity: color sólido (azul profundo), sin degradé. Los acentos van en
+  // contornos/marcos y en los íconos y botones, no en el fondo.
   useEffect(() => {
     const root = document.documentElement;
-    root.style.setProperty("--deck-bg", "linear-gradient(160deg, #133A59 0%, #133A59 60%, #ABCAD7 100%)");
+    root.style.setProperty("--deck-bg", "#133A59");
     root.style.setProperty("--deck-header-fg", "#ffffff");
     return () => {
       root.style.removeProperty("--deck-bg");
