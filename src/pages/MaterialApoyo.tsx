@@ -8,7 +8,7 @@ export default function MaterialApoyo() {
     <AppShell title="Material de apoyo">
       <div className="px-5 pt-6 pb-12 space-y-6">
         <p className="text-foreground/80 leading-relaxed text-sm">
-          Recursos descargables pensados para acompañar el uso del mazo en ámbitos educativos, terapéuticos y familiares. Aplica para las tres franjas del juego: Niñez, Adolescencia y Adultez.
+          Recursos para sacarle el máximo provecho al mazo, en casa, la escuela o el consultorio. Sirve para las tres franjas: Niñez, Adolescencia y Adultez.
         </p>
 
         <article className="rounded-3xl border border-[var(--carmesi)]/15 bg-card shadow-sm overflow-hidden">
@@ -24,7 +24,7 @@ export default function MaterialApoyo() {
             </div>
 
             <p className="text-sm text-foreground/80 leading-relaxed">
-              El manual definitivo para moderadores, educadores y familias. Incluye pautas de uso responsable, variantes de juego dinámicas <strong>(Modo Ronda, Modo Libre, Modo Reto)</strong> y recomendaciones metodológicas para sacarle el máximo provecho al mazo.
+              El manual completo para moderar las charlas: pautas de uso responsable y tres variantes de juego <strong>(Modo Ronda, Modo Libre, Modo Reto)</strong> para adaptarlo a cada grupo.
             </p>
 
             <a
@@ -48,7 +48,7 @@ export default function MaterialApoyo() {
 
         <div className="rounded-2xl bg-[var(--carmesi)]/8 border border-[var(--carmesi)]/10 p-4">
           <p className="text-xs text-foreground/75 leading-relaxed text-center">
-            Esta guía está pensada tanto para acompañar tu mazo físico como para descubrir su potencial pedagógico y de conexión antes de adquirirlo.
+            Podés leerla incluso antes de comprar el mazo, para conocer su enfoque.
           </p>
         </div>
       </div>
