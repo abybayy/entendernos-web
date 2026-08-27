@@ -13,6 +13,7 @@ const INSTA_URL = "https://instagram.com/psico.mateogarcia";
 const INSTA_POSTS = [
   "https://www.instagram.com/p/DRNuw4gkpQH/",
   "https://www.instagram.com/psico.mateogarcia/reel/DcUmeY0NHzA/",
+  "https://www.instagram.com/p/DcBPEtPuFp3/",
 ];
 
 const ITEMS = [
