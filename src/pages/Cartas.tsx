@@ -51,7 +51,7 @@ const buildWhatsAppUrl = (ageLabel: string) =>
   encodeURIComponent(
     `¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. ¿Cuál es el número de cuenta para transferir $550 por un mazo?\n2. ¿Cuentan con envío dentro de Montevideo o al interior?\n3. ¿Qué tiempo tiene de entrega a partir del pago?\n\nMe gustaría llevar el mazo para la edad de: ${ageLabel}`
   );
-const SHARE_TEXT = "¡Hola! Te comparto la muestra digital de Entendernos 🃏✨. Es una app con preguntas diseñadas para hablar de lo que no se habla. No es para jugar online, ¡es para abrirla, dejar el celular sobre la mesa y charlar frente a frente!";
+const SHARE_TEXT = "Te comparto Entendernos 💛 Preguntas lindas para charlar cara a cara.";
 
 export default function Cartas() {
   const [searchParams] = useSearchParams();
