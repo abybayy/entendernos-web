@@ -49,7 +49,7 @@ const DECK_NEXT_LABEL: Record<DeckId, string> = {
 const buildWhatsAppUrl = (ageLabel: string) =>
   "https://wa.me/59898917770?text=" +
   encodeURIComponent(
-    `¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. Costo por transferencia\n2. Costo de envío dentro de Montevideo\n3. Tiempo estimado de entrega\n\nMe gustaría llevar el mazo para la edad de: ${ageLabel}`
+    `¡Hola! Me gustaría saber más detalles sobre el juego de cartas *Entendernos*:\n\n1. ¿Cuál es el número de cuenta para transferir $550 por un mazo?\n2. ¿Cuentan con envío dentro de Montevideo o al interior?\n3. ¿Qué tiempo tiene de entrega a partir del pago?\n\nMe gustaría llevar el mazo para la edad de: ${ageLabel}`
   );
 const SHARE_TEXT = "¡Hola! Te comparto la muestra digital de Entendernos 🃏✨. Es una app con preguntas diseñadas para hablar de lo que no se habla. No es para jugar online, ¡es para abrirla, dejar el celular sobre la mesa y charlar frente a frente!";
 
