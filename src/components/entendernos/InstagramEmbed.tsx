@@ -32,7 +32,16 @@ function ensureEmbedScript(onReady: () => void) {
  * Instagram/Meta (igual que en cualquier sitio con contenido social embebido). */
 export function InstagramEmbed({ url }: { url: string }) {
   useEffect(() => {
-    ensureEmbedScript(() => window.instgrm?.Embeds.process());
+    // Cuando varias publicaciones se procesan juntas (ej. una es un reel), a veces
+    // el cálculo de alto de una de ellas se pierde en la carrera y queda con 0px
+    // (invisible aunque el iframe exista). Un segundo process() post-carrera lo corrige.
+    let retryTimer: number | undefined;
+    const process = () => {
+      window.instgrm?.Embeds.process();
+      retryTimer = window.setTimeout(() => window.instgrm?.Embeds.process(), 1200);
+    };
+    ensureEmbedScript(process);
+    return () => { if (retryTimer) window.clearTimeout(retryTimer); };
   }, [url]);
 
   return (
