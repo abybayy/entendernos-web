@@ -252,7 +252,7 @@ export default function Cartas() {
         </h2>
 
         <div className="flex flex-col gap-3">
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#075E54] text-white py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#0c7c6d] transition-colors">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#25D366] text-white py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#1EBE5B] transition-colors">
             <WhatsAppIcon />
             Atención personalizada
           </a>
