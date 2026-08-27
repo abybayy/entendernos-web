@@ -251,6 +251,18 @@ export default function Cartas() {
           <Sparkles className="w-5 h-5" style={{ color: "var(--deck-fg, var(--carmesi))" }} /> ¿Querés adquirir el mazo completo?
         </h2>
 
+        <div className="flex items-center justify-center gap-4 mb-4" style={{ color: "var(--deck-fg, var(--foreground))" }}>
+          <div className="text-center">
+            <p className="text-2xl" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>$590</p>
+            <p className="text-xs opacity-70">Mercado Pago</p>
+          </div>
+          <div className="h-9 w-px bg-current opacity-15" />
+          <div className="text-center">
+            <p className="text-2xl" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>$550</p>
+            <p className="text-xs opacity-70">Transferencia</p>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-3">
           <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full rounded-full bg-[#25D366] text-[#0b3d24] py-3.5 px-5 font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#1EBE5B] transition-colors">
             <WhatsAppIcon />

@@ -16,7 +16,18 @@ export default function MazoFisico() {
         <p className="text-foreground/85 leading-relaxed">
           <strong>Entendernos</strong> es un juego de <strong>45 cartas de preguntas disparadoras</strong>, creado para fomentar la <strong>conexión</strong>, la <strong>empatía</strong> y el <strong>autoconocimiento</strong>, promover la <strong>salud mental</strong> y fortalecer la <strong>inteligencia emocional</strong> mediante momentos de diálogo y escucha activa. Tiene <strong>3 versiones</strong> para distintas franjas etarias: <em>niñez</em>, <em>adolescencia</em> y <em>adultez</em>.
         </p>
-        <p className="text-xs text-muted-foreground -mt-2">
+        <div className="flex items-center justify-center gap-4 py-1">
+          <div className="text-center">
+            <p className="text-2xl" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--azul-marino)" }}>$590</p>
+            <p className="text-xs text-muted-foreground">Mercado Pago</p>
+          </div>
+          <div className="h-9 w-px bg-border" />
+          <div className="text-center">
+            <p className="text-2xl" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--azul-marino)" }}>$550</p>
+            <p className="text-xs text-muted-foreground">Transferencia</p>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground -mt-2 text-center">
           Tu compra por Mercado Pago es válida para las 3 franjas: indicás el mazo que querés al coordinar el envío o retiro.
         </p>
         <BuyDeckButton />
