@@ -54,15 +54,13 @@ export function BuyDeckButton({
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-5">
           <div className="absolute inset-0 bg-black/50" onClick={() => { playMenuSwish(); setOpen(false); }} aria-hidden />
           <div className="relative w-full max-w-sm bg-card rounded-[28px] border-2 p-6 shadow-2xl animate-in fade-in zoom-in-95" style={{ borderColor: MERCADO_PAGO_BLUE }}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="flex items-center gap-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--azul-marino)" }}>
-                <MercadoPagoIcon className="w-6 h-6" color={MERCADO_PAGO_BLUE} />
-                ¿Qué mazo querés comprar?
-              </h3>
-              <button data-sfx="none" onClick={() => { playMenuSwish(); setOpen(false); }} aria-label="Cerrar" className="p-1 -mr-1 shrink-0">
-                <X className="w-5 h-5 text-foreground" />
-              </button>
-            </div>
+            <button data-sfx="none" onClick={() => { playMenuSwish(); setOpen(false); }} aria-label="Cerrar" className="absolute top-5 right-5 p-1 z-10">
+              <X className="w-5 h-5 text-foreground" />
+            </button>
+            <h3 className="flex items-center justify-center gap-2 mb-4 text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: "var(--azul-marino)" }}>
+              <MercadoPagoIcon className="w-6 h-6" color={MERCADO_PAGO_BLUE} />
+              ¿Qué mazo querés comprar?
+            </h3>
             <p className="-mt-2 mb-4 text-sm text-center text-muted-foreground">$590 cada mazo</p>
             <div className="flex flex-col gap-2.5">
               {DECK_OPTIONS.map((deck) => (
