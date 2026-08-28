@@ -258,9 +258,6 @@ export default function Cartas() {
           </a>
           <BuyDeckButton />
         </div>
-        <p className="mt-2 text-xs text-center" style={{ color: "var(--deck-fg, var(--muted-foreground))", opacity: 0.75 }}>
-          Tu compra por Mercado Pago es válida para las 3 franjas: indicás el mazo que querés al coordinar el envío o retiro.
-        </p>
 
         <button onClick={handleShareProject} className="mt-5 w-full bg-card border rounded-full py-3 font-medium text-sm hover:bg-muted transition-colors flex items-center justify-center gap-2" style={{ color: "var(--azul-marino)", borderColor: "color-mix(in oklab, var(--azul-marino) 25%, transparent)" }}>
           Compartir juego <Share2 className="w-4 h-4" />
