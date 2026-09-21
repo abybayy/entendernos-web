@@ -5,8 +5,7 @@ import { playTutorialNext } from "@/lib/sounds";
 // Bumped a v8: sin flecha. Cuando el foco está abajo, la burbuja queda apoyada
 // justo sobre su borde superior (pegada), igual que el paso 2 se apoya sobre
 // el suyo — nunca flota suelta en el centro.
-const KEY = "entendernos:tutorial:done:v8";
-
+const KEY = "entendernos:tutorial:done:v9";
 type Step = {
   targetId: string | null;
   body: string;
@@ -14,9 +13,9 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { targetId: "tut-deck-nav", body: "Elegí la franja según la persona más joven del grupo", shape: "rect" },
-  { targetId: "tut-card", body: "Leé la pregunta y escuchá con el corazón", shape: "rect" },
-  { targetId: "tut-next", body: "Pasá a la siguiente carta cuando estén listos. ¡Lo más importante es el encuentro real!", shape: "rect" },
+  { targetId: "tut-deck-nav", body: "Mínimo 2 participantes. Para empezar, elegí la franja según la persona más joven del grupo.", shape: "rect" },
+  { targetId: "tut-card", body: "Leé la pregunta y escuchá abiertamente.", shape: "rect" },
+  { targetId: "tut-next", body: "Pueden elegir otra pregunta cuando lo crean necesario. Lo más importante es escucharnos, para entendernos mejor.", shape: "rect" },
 ];
 
 const PAD = 8;
