@@ -2,10 +2,11 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped a v8: sin flecha. Cuando el foco está abajo, la burbuja queda apoyada
-// justo sobre su borde superior (pegada), igual que el paso 2 se apoya sobre
-// el suyo — nunca flota suelta en el centro.
-const KEY = "entendernos:tutorial:done:v9";
+// Bumped a v10: se corrige un bug real del spotlight (ver useLayoutEffect más
+// abajo) y se reescribe el paso 1 para que el mínimo de participantes quede
+// integrado en una sola oración en vez de dos frases sueltas.
+const KEY = "entendernos:tutorial:done:v10";
+
 type Step = {
   targetId: string | null;
   body: string;
@@ -13,7 +14,7 @@ type Step = {
 };
 
 const STEPS: Step[] = [
-  { targetId: "tut-deck-nav", body: "Mínimo 2 participantes. Para empezar, elegí la franja según la persona más joven del grupo.", shape: "rect" },
+  { targetId: "tut-deck-nav", body: "Para comenzar, tienen que ser 2 o más personas y elegir la franja según la persona más joven del grupo.", shape: "rect" },
   { targetId: "tut-card", body: "Leé la pregunta y escuchá abiertamente.", shape: "rect" },
   { targetId: "tut-next", body: "Pueden elegir otra pregunta cuando lo crean necesario. Lo más importante es escucharnos, para entendernos mejor.", shape: "rect" },
 ];
@@ -61,6 +62,14 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
 
   // Measure target only for steps that spotlight a real element (no scrolling needed —
   // the bubble is docked at the bottom regardless of target position).
+  //
+  // Bug real detectado y corregido: la única remedición tardía era un solo
+  // setTimeout a los 120ms. Si el layout todavía se estaba acomodando después
+  // de eso (fuentes web, imágenes, o el breakpoint móvil aplicándose un poco
+  // tarde), el spotlight se quedaba pegado a esa posición vieja para siempre
+  // — en el paso 1 esto hacía que el recuadro iluminado apareciera muy por
+  // debajo de la franja real, a veces directamente fuera de la pantalla.
+  // Ahora remedimos varias veces durante el primer segundo y medio.
   useLayoutEffect(() => {
     if (!open || !s.targetId) { setRect(null); return; }
     let raf = 0;
@@ -72,12 +81,12 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
     const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure); };
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onResize, true);
-    const t1 = window.setTimeout(measure, 120);
+    const timers = [80, 200, 400, 700, 1100, 1600].map((ms) => window.setTimeout(measure, ms));
     return () => {
       window.removeEventListener("resize", onResize);
       window.removeEventListener("scroll", onResize, true);
       cancelAnimationFrame(raf);
-      clearTimeout(t1);
+      timers.forEach(clearTimeout);
     };
   }, [open, step, s.targetId]);
 
@@ -131,7 +140,7 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
             height: padded.height,
             borderRadius: radius,
             boxShadow: `0 0 0 2px ${TUT_BLUE}, 0 0 0 6px color-mix(in oklab, ${TUT_BLUE} 35%, transparent), 0 0 40px 4px color-mix(in oklab, ${TUT_BLUE} 45%, transparent)`,
-            animation: "tutPulse 1.6s ease-in-out infinite",
+            animation: "tutPulse 1.3s ease-in-out infinite",
           }}
         />
       )}
@@ -194,7 +203,7 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
         </button>
       </div>
 
-      <style>{`@keyframes tutPulse { 0%,100% { opacity: 1 } 50% { opacity: 0.6 } }`}</style>
+      <style>{`@keyframes tutPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.015); } }`}</style>
     </div>
   );
 }
