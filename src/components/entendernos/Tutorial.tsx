@@ -2,10 +2,9 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { playTutorialNext } from "@/lib/sounds";
 
-// Bumped a v10: se corrige un bug real del spotlight (ver useLayoutEffect más
-// abajo) y se reescribe el paso 1 para que el mínimo de participantes quede
-// integrado en una sola oración en vez de dos frases sueltas.
-const KEY = "entendernos:tutorial:done:v10";
+// Bumped a v11: la burbuja del paso 2 quedaba lejos de la tarjeta en pantallas
+// altas (ver dockBelow más abajo) y el latido del spotlight se hace más notorio.
+const KEY = "entendernos:tutorial:done:v11";
 
 type Step = {
   targetId: string | null;
@@ -98,13 +97,27 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
   // eso fallaba con focos altos que empiezan cerca del techo (como la tarjeta del
   // paso 2): su centro cae "abajo" aunque su borde superior esté a pocos px del
   // techo, y la burbuja terminaba naciendo por fuera de la pantalla, cortada.
+  //
+  // Bug real detectado y corregido: cuando no entraba arriba, la burbuja caía
+  // al fallback "anclada al piso de la pantalla" (bottom-0). Eso funciona bien
+  // si el foco es bajo y angosto (el nav de abajo, paso 1), pero con la tarjeta
+  // del paso 2 — que es alta y empieza cerca del techo — dejaba un hueco vacío
+  // cada vez más grande entre el borde inferior de la tarjeta y la burbuja a
+  // medida que la pantalla del celular es más alta (quedaba "lejos" del área
+  // que señala). Ahora, si no entra arriba pero sí hay lugar abajo del foco,
+  // la burbuja se pega debajo de su borde inferior en vez de irse al piso.
   const vh = typeof window !== "undefined" ? window.innerHeight : 800;
   const MIN_SPACE_ABOVE = 210;
-  const dockAbove = !!padded && padded.top >= MIN_SPACE_ABOVE;
-  // "bottom" en vez de "top": así no hace falta medir el alto de la burbuja para
-  // que su borde inferior quede justo GAP px por encima del borde del foco.
+  const MIN_SPACE_BELOW = 170;
   const GAP = 10;
+  const spaceAbove = padded ? padded.top : 0;
+  const spaceBelow = padded ? vh - (padded.top + padded.height) : 0;
+  const dockAbove = !!padded && spaceAbove >= MIN_SPACE_ABOVE;
+  const dockBelow = !!padded && !dockAbove && spaceBelow >= MIN_SPACE_BELOW;
+  // "bottom" en vez de "top" para dockAbove: así no hace falta medir el alto de
+  // la burbuja para que su borde inferior quede justo GAP px por encima del foco.
   const dockAboveBottomPx = dockAbove && padded ? Math.max(0, vh - padded.top + GAP) : undefined;
+  const dockBelowTopPx = dockBelow && padded ? padded.top + padded.height + GAP : undefined;
 
   if (!open) return null;
 
@@ -140,17 +153,18 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
             height: padded.height,
             borderRadius: radius,
             boxShadow: `0 0 0 2px ${TUT_BLUE}, 0 0 0 6px color-mix(in oklab, ${TUT_BLUE} 35%, transparent), 0 0 40px 4px color-mix(in oklab, ${TUT_BLUE} 45%, transparent)`,
-            animation: "tutPulse 1.3s ease-in-out infinite",
+            animation: "tutPulse 1.1s ease-in-out infinite",
           }}
         />
       )}
 
-      {/* Bubble — cuando el foco está en la mitad inferior (dockAbove), la burbuja se
-          apoya pegada justo sobre su borde superior (mismo criterio que el paso 2,
-          que ya queda pegado al foco); si no, queda anclada abajo como panel fijo. */}
+      {/* Bubble — tres modos, en orden de preferencia: pegada arriba del foco
+          (dockAbove), pegada debajo del foco (dockBelow, fix del paso 2 que
+          quedaba lejos de la tarjeta), o como último recurso anclada al piso
+          de la pantalla (ni arriba ni abajo entra, p. ej. foco enorme). */}
       <div
         className={
-          dockAbove
+          dockAbove || dockBelow
             ? "fixed left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] text-white px-5 py-5 rounded-3xl shadow-2xl"
             : "fixed left-1/2 bottom-0 -translate-x-1/2 w-full text-white px-5 pt-4 rounded-t-3xl shadow-2xl"
         }
@@ -158,7 +172,8 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
           background: TUT_BLUE,
           maxWidth: 420,
           bottom: dockAbove ? `${dockAboveBottomPx}px` : undefined,
-          paddingBottom: dockAbove ? undefined : "max(1rem, env(safe-area-inset-bottom))",
+          top: dockBelow ? `${dockBelowTopPx}px` : undefined,
+          paddingBottom: dockAbove || dockBelow ? undefined : "max(1rem, env(safe-area-inset-bottom))",
         }}
       >
         <div className="flex items-center gap-2 mb-2">
@@ -203,7 +218,7 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
         </button>
       </div>
 
-      <style>{`@keyframes tutPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.015); } }`}</style>
+      <style>{`@keyframes tutPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.05); } }`}</style>
     </div>
   );
 }
