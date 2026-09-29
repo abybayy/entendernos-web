@@ -259,7 +259,7 @@ export default function Cartas() {
           <BuyDeckButton />
         </div>
 
-        <button onClick={handleShareProject} className="mt-5 w-full bg-card border rounded-full py-3 font-medium text-sm hover:bg-muted transition-colors flex items-center justify-center gap-2" style={{ color: "var(--azul-marino)", borderColor: "color-mix(in oklab, var(--azul-marino) 25%, transparent)" }}>
+                <button onClick={handleShareProject} className="mt-5 w-full py-3 font-medium text-sm hover:underline underline-offset-2 transition-colors flex items-center justify-center gap-2" style={{ color: "var(--azul-marino)" }}>
           Compartir juego <Share2 className="w-4 h-4" />
         </button>
 
