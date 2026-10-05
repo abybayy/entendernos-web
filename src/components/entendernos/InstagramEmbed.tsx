@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { Spinner } from "./Spinner";
+
 /** Embed oficial de Instagram, vía el endpoint directo .../embed/captioned/ de
  * Instagram (el mismo que usa su script oficial embed.js por detrás). Se eligió
  * este método -en vez del widget con blockquote + embed.js- porque con varias
@@ -16,9 +19,16 @@ function toEmbedSrc(url: string): string {
 }
 
 export function InstagramEmbed({ url }: { url: string }) {
+  const [loaded, setLoaded] = useState(false);
   return (
-    <div className="flex justify-center overflow-hidden rounded-[24px] bg-card">
+    <div className="relative flex justify-center overflow-hidden rounded-[24px] bg-card">
+      {!loaded && (
+        <div className="absolute inset-x-0 top-24 flex justify-center pointer-events-none">
+          <Spinner />
+        </div>
+      )}
       <iframe
+        onLoad={() => setLoaded(true)}
         src={toEmbedSrc(url)}
         className="w-full border-0 block"
         style={{ height: 880, maxWidth: 400 }}

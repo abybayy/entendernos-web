@@ -22,7 +22,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Splash de carga: se muestra hasta que React monta y reemplaza este contenido. -->
+      <style>
+        .boot{min-height:100vh;display:grid;place-items:center;background:#fdf6f3}
+        .boot .loader{--color-1:#133A59;--color-2:rgba(0,0,0,0);--size:1px;width:60px;height:60px;display:block;position:relative;background:radial-gradient(ellipse at center,var(--color-1) 69%,var(--color-2) 70%),linear-gradient(to right,var(--color-2) 47%,var(--color-1) 48%,var(--color-1) 52%,var(--color-2) 53%);background-size:20px 20px,20px auto;background-repeat:repeat-x;background-position:center bottom,center -5px;box-sizing:border-box}
+        .boot .loader::before,.boot .loader::after{content:'';box-sizing:border-box;position:absolute;left:-20px;top:0;width:20px;height:60px;background:radial-gradient(ellipse at center,var(--color-1) 69%,var(--color-2) 70%),linear-gradient(to right,var(--color-2) 47%,var(--color-1) 48%,var(--color-1) 52%,var(--color-2) 53%);background-size:20px 20px,20px auto;background-repeat:no-repeat;background-position:center bottom,center -5px;transform-origin:50% 0;animation:bootPend 1s linear infinite alternate}
+        .boot .loader::after{animation:bootPend2 1s linear infinite alternate;left:100%}
+        @keyframes bootPend{0%{transform:rotate(22deg)}50%{transform:rotate(0)}}
+        @keyframes bootPend2{0%,55%{transform:rotate(0)}100%{transform:rotate(-22deg)}}
+      </style>
+      <div class="boot"><span class="loader" role="status" aria-label="Cargando"></span></div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
     <!-- Cloudflare Web Analytics: sin cookies, no identifica visitantes individuales.
          Solo cuenta vistas de página y de dónde vienen. -->
