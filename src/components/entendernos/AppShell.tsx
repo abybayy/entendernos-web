@@ -98,7 +98,7 @@ export function AppShell({ title = "Menú", children, franja }: { title?: string
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl transition text-foreground hover:bg-muted text-left"
               >
                 <BookOpen className="w-5 h-5" />
-                <span>Tutorial</span>
+                <span>Cómo jugar</span>
               </button>
               {SECONDARY.map((n) => {
                 const Icon = n.icon;

@@ -1,36 +1,29 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { ArrowRight, ArrowLeft } from "lucide-react";
-import { playTutorialNext } from "@/lib/sounds";
+import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 
-// Bumped a v11: la burbuja del paso 2 quedaba lejos de la tarjeta en pantallas
-// altas (ver dockBelow más abajo) y el latido del spotlight se hace más notorio.
-const KEY = "entendernos:tutorial:done:v11";
-
-type Step = {
-  targetId: string | null;
-  body: string;
-  shape?: "rect" | "pill";
-};
-
-const STEPS: Step[] = [
-  { targetId: "tut-deck-nav", body: "Para comenzar, tienen que ser 2 o más personas y elegir la franja según la persona más joven del grupo.", shape: "rect" },
-  { targetId: "tut-card", body: "Leé la pregunta y escuchá abiertamente.", shape: "rect" },
-  { targetId: "tut-next", body: "Pueden elegir otra pregunta cuando lo crean necesario. Lo más importante es escucharnos, para entendernos mejor.", shape: "rect" },
-];
-
-const PAD = 8;
+// v12: el tutorial de 3 pasos se reemplazó por un único aviso corto sobre las
+// pestañas. Al cambiar la clave, quien ya había visto el tutorial viejo vuelve
+// a ver este aviso una vez.
+const KEY = "entendernos:tutorial:done:v12";
 const TUT_BLUE = "#133A59";
+const FALLBACK_NAV_HEIGHT = 72;
 
-export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boolean; onClose?: () => void; onOpenChange?: (open: boolean) => void }) {
+// Mantiene el mismo nombre y las mismas props que el tutorial anterior para que
+// Cartas.tsx y el botón "Tutorial" del menú sigan funcionando sin cambios.
+export function Tutorial({ force = false, onOpenChange }: { force?: boolean; onClose?: () => void; onOpenChange?: (open: boolean) => void }) {
   const [open, setOpen] = useState(false);
-  const [step, setStep] = useState(0);
-  const [rect, setRect] = useState<DOMRect | null>(null);
+  const [navHeight, setNavHeight] = useState(FALLBACK_NAV_HEIGHT);
 
+  const close = () => {
+    try { localStorage.setItem(KEY, "1"); } catch {}
+    setOpen(false);
+  };
+
+  // Mostrar la primera vez (o siempre que se fuerce desde el menú).
   useEffect(() => {
     if (force) {
       try { localStorage.removeItem(KEY); } catch {}
       setOpen(true);
-      setStep(0);
       return;
     }
     try {
@@ -38,187 +31,70 @@ export function Tutorial({ force = false, onClose, onOpenChange }: { force?: boo
     } catch {}
   }, [force]);
 
+  // El botón "Tutorial" del menú vuelve a mostrar el aviso.
   useEffect(() => {
     const onStart = () => {
       try { localStorage.removeItem(KEY); } catch {}
-      setStep(0);
       setOpen(true);
     };
     window.addEventListener("entendernos:tutorial:start", onStart);
     return () => window.removeEventListener("entendernos:tutorial:start", onStart);
   }, []);
 
-  useEffect(() => { onOpenChange?.(open); }, [open, onOpenChange]);
+  // El aviso no bloquea la pantalla, así que nunca pausa el temporizador de las cartas.
+  useEffect(() => { onOpenChange?.(false); }, [onOpenChange]);
 
+  // Apoyar el aviso justo encima de las pestañas, sea cual sea su alto.
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [open]);
-
-  const s = STEPS[step];
-
-  // Measure target only for steps that spotlight a real element (no scrolling needed —
-  // the bubble is docked at the bottom regardless of target position).
-  //
-  // Bug real detectado y corregido: la única remedición tardía era un solo
-  // setTimeout a los 120ms. Si el layout todavía se estaba acomodando después
-  // de eso (fuentes web, imágenes, o el breakpoint móvil aplicándose un poco
-  // tarde), el spotlight se quedaba pegado a esa posición vieja para siempre
-  // — en el paso 1 esto hacía que el recuadro iluminado apareciera muy por
-  // debajo de la franja real, a veces directamente fuera de la pantalla.
-  // Ahora remedimos varias veces durante el primer segundo y medio.
-  useLayoutEffect(() => {
-    if (!open || !s.targetId) { setRect(null); return; }
-    let raf = 0;
     const measure = () => {
-      const el = document.getElementById(s.targetId!);
-      setRect(el ? el.getBoundingClientRect() : null);
+      const nav = document.getElementById("tut-deck-nav");
+      setNavHeight(nav ? Math.round(nav.getBoundingClientRect().height) : FALLBACK_NAV_HEIGHT);
     };
     measure();
-    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(measure); };
-    window.addEventListener("resize", onResize);
-    window.addEventListener("scroll", onResize, true);
-    const timers = [80, 200, 400, 700, 1100, 1600].map((ms) => window.setTimeout(measure, ms));
+    window.addEventListener("resize", measure);
+    const t = window.setTimeout(measure, 400);
     return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onResize, true);
-      cancelAnimationFrame(raf);
-      timers.forEach(clearTimeout);
+      window.removeEventListener("resize", measure);
+      window.clearTimeout(t);
     };
-  }, [open, step, s.targetId]);
+  }, [open]);
 
-  const padded = rect ? { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 } : null;
-
-  // La burbuja se apoya pegada sobre el borde superior del foco solo si arriba
-  // del foco hay lugar real para que entre (alto típico de la burbuja + margen).
-  // Antes se decidía según el CENTRO del foco vs. la mitad de la pantalla, pero
-  // eso fallaba con focos altos que empiezan cerca del techo (como la tarjeta del
-  // paso 2): su centro cae "abajo" aunque su borde superior esté a pocos px del
-  // techo, y la burbuja terminaba naciendo por fuera de la pantalla, cortada.
-  //
-  // Bug real detectado y corregido: cuando no entraba arriba, la burbuja caía
-  // al fallback "anclada al piso de la pantalla" (bottom-0). Eso funciona bien
-  // si el foco es bajo y angosto (el nav de abajo, paso 1), pero con la tarjeta
-  // del paso 2 — que es alta y empieza cerca del techo — dejaba un hueco vacío
-  // cada vez más grande entre el borde inferior de la tarjeta y la burbuja a
-  // medida que la pantalla del celular es más alta (quedaba "lejos" del área
-  // que señala). Ahora, si no entra arriba pero sí hay lugar abajo del foco,
-  // la burbuja se pega debajo de su borde inferior en vez de irse al piso.
-  const vh = typeof window !== "undefined" ? window.innerHeight : 800;
-  const MIN_SPACE_ABOVE = 210;
-  const MIN_SPACE_BELOW = 170;
-  const GAP = 10;
-  const spaceAbove = padded ? padded.top : 0;
-  const spaceBelow = padded ? vh - (padded.top + padded.height) : 0;
-  const dockAbove = !!padded && spaceAbove >= MIN_SPACE_ABOVE;
-  const dockBelow = !!padded && !dockAbove && spaceBelow >= MIN_SPACE_BELOW;
-  // "bottom" en vez de "top" para dockAbove: así no hace falta medir el alto de
-  // la burbuja para que su borde inferior quede justo GAP px por encima del foco.
-  const dockAboveBottomPx = dockAbove && padded ? Math.max(0, vh - padded.top + GAP) : undefined;
-  const dockBelowTopPx = dockBelow && padded ? padded.top + padded.height + GAP : undefined;
+  // Si la persona toca una pestaña, ya entendió la regla: se cierra solo.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: PointerEvent) => {
+      const nav = document.getElementById("tut-deck-nav");
+      if (nav && e.target instanceof Node && nav.contains(e.target)) close();
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [open]);
 
   if (!open) return null;
 
-  const last = step === STEPS.length - 1;
-  const close = () => {
-    try { localStorage.setItem(KEY, "1"); } catch {}
-    setOpen(false);
-    onClose?.();
-  };
-
-  const radius = s.shape === "pill" ? 9999 : 20;
-
   return (
-    <div className="fixed inset-0 z-[60] pointer-events-auto">
-      {/* Dim layer, with cutout only when a real target is being spotlighted */}
-      <svg className="absolute inset-0 w-full h-full" aria-hidden>
-        <defs>
-          <mask id="entendernos-tut-mask">
-            <rect width="100%" height="100%" fill="white" />
-            {padded && <rect x={padded.left} y={padded.top} width={padded.width} height={padded.height} rx={radius} ry={radius} fill="black" />}
-          </mask>
-        </defs>
-        <rect width="100%" height="100%" fill="rgba(19, 58, 89, 0.72)" mask="url(#entendernos-tut-mask)" />
-      </svg>
-
-      {padded && (
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            top: padded.top,
-            left: padded.left,
-            width: padded.width,
-            height: padded.height,
-            borderRadius: radius,
-            boxShadow: `0 0 0 2px ${TUT_BLUE}, 0 0 0 6px color-mix(in oklab, ${TUT_BLUE} 35%, transparent), 0 0 40px 4px color-mix(in oklab, ${TUT_BLUE} 45%, transparent)`,
-            animation: "tutPulse 1.1s ease-in-out infinite",
-          }}
-        />
-      )}
-
-      {/* Bubble — tres modos, en orden de preferencia: pegada arriba del foco
-          (dockAbove), pegada debajo del foco (dockBelow, fix del paso 2 que
-          quedaba lejos de la tarjeta), o como último recurso anclada al piso
-          de la pantalla (ni arriba ni abajo entra, p. ej. foco enorme). */}
-      <div
-        className={
-          dockAbove || dockBelow
-            ? "fixed left-1/2 -translate-x-1/2 w-[calc(100%-2.5rem)] text-white px-5 py-5 rounded-3xl shadow-2xl"
-            : "fixed left-1/2 bottom-0 -translate-x-1/2 w-full text-white px-5 pt-4 rounded-t-3xl shadow-2xl"
-        }
-        style={{
-          background: TUT_BLUE,
-          maxWidth: 420,
-          bottom: dockAbove ? `${dockAboveBottomPx}px` : undefined,
-          top: dockBelow ? `${dockBelowTopPx}px` : undefined,
-          paddingBottom: dockAbove || dockBelow ? undefined : "max(1rem, env(safe-area-inset-bottom))",
-        }}
+    <div
+      role="note"
+      className="fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] text-white rounded-2xl shadow-2xl pl-5 pr-3 py-3 flex items-center gap-3"
+      style={{ background: TUT_BLUE, maxWidth: 400, bottom: navHeight + 14 }}
+    >
+      <p className="flex-1 text-base leading-snug">
+        Para 2 o más personas. Elijan la franja según la persona más joven.
+      </p>
+      <button
+        data-sfx="none"
+        onClick={close}
+        aria-label="Cerrar aviso"
+        className="shrink-0 h-10 w-10 rounded-full grid place-items-center hover:bg-white/10 active:scale-95 transition"
       >
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-8 h-8 rounded-full bg-white grid place-items-center text-sm font-bold shrink-0" style={{ color: TUT_BLUE }}>{step + 1}</span>
-          <span className="text-sm font-bold tracking-wider opacity-90">Paso {step + 1} de {STEPS.length}</span>
-        </div>
-
-        <p className="text-base leading-snug mb-3">{s.body}</p>
-
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex gap-1.5 shrink-0">
-            {STEPS.map((_, i) => (
-              <span key={i} className={`h-1.5 rounded-full transition-all ${i === step ? "w-6 bg-white" : "w-1.5 bg-white/40"}`} />
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
-            {step > 0 && (
-              <button
-                data-sfx="none"
-                onClick={() => { playTutorialNext(); setStep((n) => Math.max(0, n - 1)); }}
-                className="rounded-full px-4 py-2 font-semibold text-sm flex items-center gap-1.5 border border-white/60 text-white hover:bg-white/10 active:scale-95 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Atrás
-              </button>
-            )}
-            <button
-              data-sfx="none"
-              onClick={() => { playTutorialNext(); if (last) close(); else setStep((n) => n + 1); }}
-              className="bg-white rounded-full px-5 py-2 font-semibold text-sm flex items-center gap-1.5 hover:bg-white/90 active:scale-95 transition-colors"
-              style={{ color: TUT_BLUE }}
-            >
-              {last ? "Empezar" : "Siguiente"}
-              {!last && <ArrowRight className="w-4 h-4" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Fix: "Saltar tutorial" — solo texto, sin fondo ni contorno (baja jerarquía). */}
-        <button data-sfx="none" onClick={close} className="mt-3 mb-1 mx-auto block text-sm font-medium text-white/70 hover:text-white underline-offset-2 hover:underline transition-colors">
-          Saltar tutorial
-        </button>
-      </div>
-
-      <style>{`@keyframes tutPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.05); } }`}</style>
+        <X className="w-5 h-5" />
+      </button>
+      <span
+        aria-hidden
+        className="absolute left-1/2 -bottom-1.5 h-3 w-3 -translate-x-1/2 rotate-45"
+        style={{ background: TUT_BLUE }}
+      />
     </div>
   );
 }
