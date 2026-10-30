@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Heart, ArrowRight, ArrowLeft, Share2, Users, Sparkles, Smile, Pause, Play } from "lucide-react";
+import { Heart, ArrowRight, ArrowLeft, Share2, Users, Sparkles, Smile, Pause, Play, Ear } from "lucide-react";
 import { WhatsAppIcon } from "@/components/entendernos/BrandIcons";
 import { toast, Toaster } from "sonner";
 import { DECKS, type DeckId } from "@/data/cards";
@@ -61,6 +61,9 @@ export default function Cartas() {
   const [activeDeck, setActiveDeck] = useState<DeckId>("adulto");
   const [index, setIndex] = useState(0);
   const [fading, setFading] = useState(false);
+  // Movimiento chico al pasar de carta: -1 sale hacia la izquierda (siguiente), 1 hacia la derecha (anterior).
+  const [motion, setMotion] = useState<-1 | 0 | 1>(0);
+  const reduceMotion = useMemo(() => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches, []);
   const [favorites, setFavorites] = useState<Set<string>>(() => loadFavorites());
   const [elapsed, setElapsed] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -74,6 +77,7 @@ export default function Cartas() {
   const currentNum = currentIdx + 1;
   const progressPct = total > 1 ? (currentIdx / (total - 1)) * 100 : 0;
   const qKey = `${deck.id}:${currentIdx}`;
+  const behind = Math.min(2, total - currentNum);
   const isFav = favorites.has(qKey);
 
   const next = () => {
@@ -84,9 +88,15 @@ export default function Cartas() {
     }
     playWhoosh();
     setFading(true);
-    setTimeout(() => { setIndex((i) => i + 1); setFading(false); }, 220);
+    if (!reduceMotion) setMotion(-1);
+    setTimeout(() => { setIndex((i) => i + 1); setFading(false); setMotion(0); }, 220);
   };
-  const prev = () => { playWhoosh(0.12); setFading(true); setTimeout(() => { setIndex((i) => i - 1); setFading(false); }, 220); };
+  const prev = () => {
+    playWhoosh(0.12);
+    setFading(true);
+    if (!reduceMotion) setMotion(1);
+    setTimeout(() => { setIndex((i) => i - 1); setFading(false); setMotion(0); }, 220);
+  };
   const switchDeck = (id: DeckId) => { if (id === activeDeck) return; playChime(); setFading(true); setTimeout(() => { setActiveDeck(id); setIndex(0); setFranja(DECK_FRANJA[id]); setFading(false); }, 220); };
 
   useEffect(() => { setFranja(DECK_FRANJA[activeDeck]); }, [activeDeck, setFranja]);
@@ -188,18 +198,25 @@ export default function Cartas() {
     <AppShell title={deckTitle} franja={franja}>
       <div className="px-5 pt-4">
         <div className="flex justify-center -mb-10 relative z-10">
-          <Link to="/mazo-fisico" aria-label="Ir al mazo físico" className="rounded-full overflow-hidden bg-white shadow-[0_4px_14px_-4px_rgba(16,42,67,0.25)] border-2 border-[var(--carmesi)] block hover:scale-[1.03] active:scale-95 transition" style={{ width: 90, height: 90 }}>
-            <img src={logoUrl} alt="Entendernos" style={{ width: "100%", height: "100%", objectFit: "contain", aspectRatio: "1 / 1", display: "block" }} />
+          <Link to="/mazo-fisico" aria-label="Ir al mazo físico" className="rounded-full overflow-hidden shadow-[0_4px_14px_-4px_rgba(16,42,67,0.25)] border-2 border-[var(--carmesi)] block hover:scale-[1.03] active:scale-95 transition" style={{ width: 90, height: 90, background: "#9CDEEA" }}>
+            <img src={logoUrl} alt="Entendernos" style={{ width: "100%", height: "100%", objectFit: "contain", aspectRatio: "1 / 1", display: "block", transform: "scale(1.06)" }} />
           </Link>
         </div>
 
+        <div className="relative w-full max-w-[360px] mx-auto mb-6">
+        {behind >= 2 && (
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-card border-2 rounded-[28px]" style={{ borderColor: "var(--f-base)", transform: "translateY(17px) rotate(1deg) scale(0.955)", transformOrigin: "50% 100%", opacity: 0.7 }} />
+        )}
+        {behind >= 1 && (
+          <div aria-hidden className="pointer-events-none absolute inset-0 bg-card border-2 rounded-[28px]" style={{ borderColor: "var(--f-base)", transform: "translateY(9px) rotate(-0.8deg) scale(0.98)", transformOrigin: "50% 100%", opacity: 0.9 }} />
+        )}
         <div
           id="tut-card"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={() => (gesture.current.active = false)}
-          className="w-full max-w-[360px] mx-auto bg-card border-2 rounded-[28px] shadow-[0_8px_24px_-12px_rgba(16,42,67,0.2)] pt-12 px-5 pb-5 min-h-[480px] flex flex-col touch-pan-y select-none"
-          style={{ borderColor: "var(--f-base)" }}
+          className="relative w-full bg-card border-2 rounded-[28px] shadow-[0_16px_32px_-14px_rgba(16,42,67,0.38)] pt-12 px-5 pb-5 min-h-[480px] flex flex-col touch-pan-y select-none"
+          style={{ borderColor: "var(--f-base)", transform: motion === 0 ? undefined : `translateX(${motion * 14}px) rotate(${motion * 1.5}deg)`, transition: "transform 220ms ease-out" }}
         >
           <div className={`flex items-start justify-between gap-2 transition-opacity duration-200 ${fading ? "opacity-0" : "opacity-100"}`}>
             <div className="flex-1">
@@ -237,6 +254,10 @@ export default function Cartas() {
             </p>
           </div>
 
+          <p className="mb-4 flex items-center justify-center gap-1.5 text-center text-sm leading-snug text-muted-foreground">
+            <Ear className="w-4 h-4 shrink-0" aria-hidden /> Leé en voz alta y escuchen sin interrumpir
+          </p>
+
           <div className="flex items-center gap-3">
             <button data-sfx="none" onClick={prev} aria-label="Anterior" className="shrink-0 h-12 w-12 rounded-full border-2 flex items-center justify-center hover:bg-muted active:scale-95 transition" style={{ color: "var(--f-ink)", borderColor: "var(--f-base)" }}>
               <ArrowLeft className="w-5 h-5" />
@@ -246,8 +267,9 @@ export default function Cartas() {
             </button>
           </div>
         </div>
+        </div>
 
-        <h2 className="mt-8 mb-3 font-bold flex items-center justify-center gap-2 text-center" style={{ fontFamily: "var(--font-display)", color: "var(--deck-fg, var(--foreground))" }}>
+        <h2 className="mt-10 mb-3 font-bold flex items-center justify-center gap-2 text-center" style={{ fontFamily: "var(--font-display)", color: "var(--deck-fg, var(--foreground))" }}>
           <Sparkles className="w-5 h-5" style={{ color: "var(--deck-fg, var(--carmesi))" }} /> ¿Te gustaría adquirir el mazo completo?
         </h2>
 
@@ -298,8 +320,8 @@ export default function Cartas() {
             <div className="mx-auto w-14 h-14 rounded-full grid place-items-center mb-3" style={{ background: styles.baseHex }}>
               <Heart className="w-7 h-7 text-white" />
             </div>
-            <h3 className="text-center text-xl mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: styles.baseHex }}>Qué lindo encuentro</h3>
-            <p className="text-center text-foreground/80 leading-snug mb-5">Esta fue solo una experiencia de prueba de todo lo que te espera en el mazo real.</p>
+            <h3 className="text-center text-xl mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 700, color: styles.baseHex }}>Esto fue una muestra</h3>
+            <p className="text-center text-foreground/80 leading-snug mb-5">Viste {total} de las 45 cartas de esta franja. El mazo completo se juega en persona, sin pantallas.</p>
             <div className="flex flex-col gap-2">
               <button onClick={continueOtherLevel} className="w-full rounded-full py-3 font-semibold shadow-md hover:opacity-90 transition-opacity" style={{ background: nextStyles.baseHex, color: nextStyles.fg }}>
                 {DECK_NEXT_LABEL[activeDeck]}
