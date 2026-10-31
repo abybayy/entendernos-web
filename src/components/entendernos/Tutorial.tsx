@@ -6,6 +6,7 @@ import { X } from "lucide-react";
 // a ver este aviso una vez.
 const KEY = "entendernos:tutorial:done:v12";
 const TUT_BLUE = "#133A59";
+const TUT_BG = "#DDF1F6";
 const FALLBACK_NAV_HEIGHT = 72;
 
 // Mantiene el mismo nombre y las mismas props que el tutorial anterior para que
@@ -76,24 +77,28 @@ export function Tutorial({ force = false, onOpenChange }: { force?: boolean; onC
   return (
     <div
       role="note"
-      className="fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] text-white rounded-2xl shadow-2xl pl-5 pr-3 py-3 flex items-center gap-3"
-      style={{ background: TUT_BLUE, maxWidth: 400, bottom: navHeight + 14 }}
+      onClick={close}
+      className="cursor-pointer fixed left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] rounded-2xl shadow-[0_10px_28px_-8px_rgba(19,58,89,0.45)] pl-5 pr-12 py-3.5"
+      style={{ background: TUT_BG, color: TUT_BLUE, border: `2px solid ${TUT_BLUE}`, maxWidth: 400, bottom: navHeight + 14 }}
     >
-      <p className="flex-1 text-base leading-snug">
-        Para 2 o más personas. Elijan la franja según la persona más joven.
+      <p className="text-[15px] leading-snug text-balance font-bold">
+        Se juega entre dos o más personas.
+      </p>
+      <p className="mt-0.5 text-[15px] leading-snug text-pretty">
+        Elijan la franja según la persona más joven.
       </p>
       <button
         data-sfx="none"
-        onClick={close}
+        onClick={(e) => { e.stopPropagation(); close(); }}
         aria-label="Cerrar aviso"
-        className="shrink-0 h-10 w-10 rounded-full grid place-items-center hover:bg-white/10 active:scale-95 transition"
+        className="absolute right-1.5 top-1.5 h-10 w-10 rounded-full grid place-items-center hover:bg-black/5 active:scale-95 transition"
       >
         <X className="w-5 h-5" />
       </button>
       <span
         aria-hidden
-        className="absolute left-1/2 -bottom-1.5 h-3 w-3 -translate-x-1/2 rotate-45"
-        style={{ background: TUT_BLUE }}
+        className="absolute left-1/2 -bottom-[8px] h-3.5 w-3.5 -translate-x-1/2 rotate-45"
+        style={{ background: TUT_BG, borderRight: `2px solid ${TUT_BLUE}`, borderBottom: `2px solid ${TUT_BLUE}` }}
       />
     </div>
   );
