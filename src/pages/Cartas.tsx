@@ -254,8 +254,8 @@ export default function Cartas() {
             </p>
           </div>
 
-          <p className="mb-4 flex items-center justify-center gap-1.5 text-center text-sm leading-snug text-muted-foreground">
-            <Ear className="w-4 h-4 shrink-0" aria-hidden /> Leé en voz alta y escuchen sin interrumpir
+          <p className="mb-4 text-center text-sm leading-snug text-balance text-muted-foreground">
+            <Ear className="inline w-4 h-4 mr-1.5 align-[-3px]" aria-hidden />Leé en voz alta y escuchen sin interrumpir
           </p>
 
           <div className="flex items-center gap-3">

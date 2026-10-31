@@ -6,7 +6,7 @@ export default function Creditos() {
   const items: { role: string; name: string; href?: string }[] = [
     { role: "Lic. en Psicología · Especialista en Psicogerontología", name: "Mateo García Moreno", href: "https://www.instagram.com/psico.mateogarcia" },
     { role: "Lic. en Diseño de Comunicación Visual · Diplomada en Diseño de Experiencia de Usuario", name: "Victoria Abigail Huayhuaca", href: "https://www.behance.net/vhuayhuaca" },
-    { role: "Desarrollo en colaboración con", name: "Claude" },
+    { role: "Desarrollo en colaboración con", name: "Claude (Anthropic), 2026", href: "https://claude.ai" },
   ];
   return (
     <AppShell title="Créditos">

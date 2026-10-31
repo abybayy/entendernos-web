@@ -9,10 +9,6 @@ export default function MaterialApoyo() {
   return (
     <AppShell title="Material de apoyo">
       <div className="px-5 pt-6 pb-12 space-y-6">
-        <p className="text-foreground/80 leading-relaxed text-base">
-          Para sacarle más provecho al mazo, en casa, la escuela o el consultorio. Sirve para las tres franjas: Niñez, Adolescencia y Adultez.
-        </p>
-
         <article className="rounded-3xl border border-[var(--carmesi)]/15 bg-card shadow-sm overflow-hidden">
           <div className="p-6 space-y-4">
             <div className="flex items-center gap-4">
@@ -22,8 +18,8 @@ export default function MaterialApoyo() {
               <h2 className="flex-1 min-w-0 text-foreground text-lg font-bold leading-snug" style={{ fontFamily: "var(--font-display)" }}>Guía de uso y convivencia</h2>
             </div>
 
-            <p className="text-base text-foreground/80 leading-relaxed">
-              Pautas para moderar las charlas y usar el mazo con responsabilidad, más tres modos de juego para adaptarlo a cada grupo.
+            <p className="text-base text-foreground/80 leading-relaxed text-pretty">
+              Pautas para moderar las charlas y usar el mazo con responsabilidad, más tres modos de juego para adaptarlo a cada grupo. Sirve para todas las franjas: Niñez, Adolescencia y Adultez.
             </p>
 
             <ul className="flex flex-wrap gap-2" aria-label="Modos de juego">

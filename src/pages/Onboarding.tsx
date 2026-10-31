@@ -25,8 +25,8 @@ export default function Onboarding() {
   const features = [
     { Icon: Users, title: "Conexión Real", body: "Preguntas que importan.", color: "#FF3399" },
     { Icon: Brain, title: "Salud Emocional", body: "Para hablar de lo que sentimos.", color: "#FF9E8F" },
-    { Icon: Smartphone, title: "Sin Pantallas", body: "Miradas a los ojos, no al celular.", color: "#9CDEEA" },
-    { Icon: Smile, title: "Para Todas las Edades", body: "Niñez, adolescencia y adultez.", color: "#69C0BE" },
+    { Icon: Smartphone, title: "Sin Pantallas", body: "Miradas a los ojos, no al celular.", color: "#9CDEEA", wide: true },
+    { Icon: Smile, title: "Para Todas las Edades", body: "Niñez, adolescencia y adultez.", color: "#69C0BE", wide: true },
   ];
 
   return (
@@ -42,23 +42,25 @@ export default function Onboarding() {
         >
           <img src={logoUrl} alt="Entendernos" style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }} />
         </a>
-        <h1 className="mt-3 text-white text-3xl text-center text-balance" style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}>Jugá a Entendernos</h1>
+        <h1 className="mt-3 text-white text-center whitespace-nowrap" style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(1.25rem, 6.6vw, 1.875rem)" }}>Juguemos a Entendernos</h1>
         <p className="mt-2 text-center text-white/85 max-w-xs leading-snug">
           Esta es una muestra digital del mazo de cartas diseñado para conversar en&nbsp;persona.
         </p>
 
         <ul className="mt-4 w-full max-w-sm grid grid-cols-2 gap-2.5">
-          {features.map(({ Icon, title, body, color }, i) => (
+          {features.map(({ Icon, title, body, color, wide }, i) => (
             <li
               key={title}
-              className="feature-card flex flex-col items-start text-left rounded-3xl p-3.5 bg-white/[0.07] border border-white/15"
+              className={`feature-card text-left rounded-3xl bg-white/[0.07] border border-white/15 ${wide ? "col-span-2 flex items-center gap-3 px-3.5 py-3" : "flex flex-col items-start p-3.5"}`}
               style={{ animationDelay: `${i * 90}ms` }}
             >
-              <span className="grid place-items-center w-10 h-10 rounded-2xl mb-2.5" style={{ background: `${color}26`, color }}>
+              <span className={`grid place-items-center shrink-0 w-10 h-10 rounded-2xl ${wide ? "" : "mb-2.5"}`} style={{ background: `${color}26`, color }}>
                 <Icon className="w-5 h-5" aria-hidden />
               </span>
-              <p className="text-white text-base leading-tight" style={{ fontWeight: 700 }}>{title}</p>
-              <p className="mt-1 text-sm text-white/75 leading-snug">{body}</p>
+              <div className="min-w-0">
+                <p className="text-white text-base leading-tight" style={{ fontWeight: 700 }}>{title}</p>
+                <p className="mt-0.5 text-sm text-white/75 leading-snug">{body}</p>
+              </div>
             </li>
           ))}
         </ul>

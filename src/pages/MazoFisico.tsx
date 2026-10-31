@@ -14,7 +14,10 @@ export default function MazoFisico() {
           <img src={mazosImg} alt="Mazos físicos Entendernos" loading="lazy" decoding="async" className="w-full h-auto block" />
         </div>
         <p className="text-foreground/85 leading-relaxed">
-          <strong>Entendernos</strong> es un juego de <strong>45 cartas de preguntas disparadoras</strong>, creado para fomentar la <strong>conexión</strong>, la <strong>empatía</strong> y el <strong>autoconocimiento</strong>, promover la <strong>salud mental</strong> y fortalecer la <strong>inteligencia emocional</strong> mediante momentos de diálogo y escucha activa. Tiene <strong>3 versiones</strong> para distintas franjas etarias: <em>niñez</em>, <em>adolescencia</em> y <em>adultez</em>.
+          <strong>Entendernos</strong> es un juego de <strong>45 cartas de preguntas disparadoras</strong>, creado para fomentar la <strong>conexión</strong>, la <strong>empatía</strong> y el <strong>autoconocimiento</strong>, promover la <strong>salud mental</strong> y fortalecer la <strong>inteligencia emocional</strong> mediante momentos de diálogo y escucha activa.
+        </p>
+        <p className="text-foreground/85 leading-relaxed">
+          Tiene <strong>3 versiones</strong> para distintas franjas etarias: <em>niñez</em>, <em>adolescencia</em> y <em>adultez</em>.
         </p>
         <div className="flex items-center justify-center gap-4 py-1">
           <div className="text-center">
