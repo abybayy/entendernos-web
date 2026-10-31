@@ -11,7 +11,7 @@ export default function MazoFisico() {
     <AppShell title="Mazo Físico">
       <div className="px-6 pt-8 pb-12 space-y-5">
         <div className="rounded-3xl overflow-hidden border border-[var(--carmesi)]/15 bg-card shadow-sm">
-          <img src={mazosImg} alt="Mazos físicos Entendernos" loading="lazy" decoding="async" className="w-full h-auto block" />
+          <img src={mazosImg} alt="Los tres mazos de Entendernos, Niñez, Adolescencia y Adultez, con algunas cartas sobre una mesa" loading="lazy" decoding="async" className="w-full h-auto block" />
         </div>
         <p className="text-foreground/85 leading-relaxed">
           <strong>Entendernos</strong> es un juego de <strong>45 cartas de preguntas disparadoras</strong>, creado para fomentar la <strong>conexión</strong>, la <strong>empatía</strong> y el <strong>autoconocimiento</strong>, promover la <strong>salud mental</strong> y fortalecer la <strong>inteligencia emocional</strong> mediante momentos de diálogo y escucha activa.
