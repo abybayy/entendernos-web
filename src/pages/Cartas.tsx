@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Heart, ArrowRight, ArrowLeft, Share2, Users, Sparkles, Smile, Pause, Play, Ear } from "lucide-react";
+import { track } from "@/lib/track";
 import { WhatsAppIcon } from "@/components/entendernos/BrandIcons";
 import { toast, Toaster } from "sonner";
 import { DECKS, type DeckId } from "@/data/cards";
@@ -167,6 +168,7 @@ export default function Cartas() {
       const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
       if (typeof nav.share === "function") await nav.share({ title: "Entendernos", text, url });
       else if (nav.clipboard) { await nav.clipboard.writeText(`${text}\n${url}`); toast.success("Pregunta copiada"); }
+      track("share_card");
     } catch (err) { if ((err as DOMException)?.name !== "AbortError") toast.error("No se pudo compartir"); }
   };
 
@@ -177,6 +179,7 @@ export default function Cartas() {
       const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
       if (typeof nav.share === "function") await nav.share({ title: "Entendernos", text, url });
       else if (nav.clipboard) { await nav.clipboard.writeText(`${text}\n${url}`); toast.success("Enlace copiado"); }
+      track("share_game");
     } catch (err) { if ((err as DOMException)?.name !== "AbortError") toast.error("No se pudo compartir"); }
   };
 

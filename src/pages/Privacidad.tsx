@@ -16,6 +16,9 @@ export default function Privacidad() {
           Por separado, cada vez que se marca una pregunta como favorita sumamos <strong>+1 a un contador anónimo de esa pregunta</strong>, sin ningún dato que identifique quién la marcó (ni nombre, ni ubicación, ni dispositivo): así podemos ver qué preguntas conectan más para mejorar el mazo, sin saber nunca quién marcó qué.
         </p>
         <p>
+          De la misma forma, sumamos <strong>+1 a contadores anónimos</strong> cuando alguien comparte una pregunta o el juego, o descarga la guía de uso. Solo guardamos cuántas veces pasó, nunca quién lo hizo.
+        </p>
+        <p>
           Para saber cuánta gente visita la app usamos <strong>Cloudflare Web Analytics</strong>, una herramienta que <strong>no usa cookies y no identifica a cada visitante</strong>: solo cuenta estadísticas generales y anónimas, como cuántas visitas hay o desde qué página se llega.
         </p>
         <p>

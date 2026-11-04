@@ -1,5 +1,6 @@
 import { Download, FileText, BookOpen } from "lucide-react";
 import { AppShell } from "@/components/entendernos/AppShell";
+import { track } from "@/lib/track";
 
 const GUIA_PDF_URL = "/Guia-Entendernos.pdf";
 
@@ -36,6 +37,7 @@ export default function MaterialApoyo() {
               target="_blank"
               rel="noopener noreferrer"
               aria-disabled={!GUIA_PDF_URL}
+              onClick={() => track("guide_download")}
               className={`w-full rounded-2xl bg-[var(--carmesi)] text-white py-3 px-5 flex items-center justify-center gap-2 font-semibold shadow-md transition ${GUIA_PDF_URL ? "hover:brightness-110" : "opacity-60 pointer-events-none"}`}
             >
               <Download className="w-5 h-5" />
